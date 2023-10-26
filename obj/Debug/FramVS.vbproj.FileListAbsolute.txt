@@ -1618,3 +1618,6 @@ C:\fram_source\FRAM\obj\Debug\FramVS.vbproj.CopyComplete
 C:\fram_source\FRAM\obj\Debug\FramVS.exe
 C:\fram_source\FRAM\obj\Debug\FramVS.xml
 C:\fram_source\FRAM\obj\Debug\FramVS.pdb
+C:\fram_source\FRAM\bin\Debug\System.Data.SQLite.dll
+C:\fram_source\FRAM\bin\Debug\System.Data.SQLite.xml
+C:\fram_source\FRAM\obj\Debug\FramVS.Form1.resources

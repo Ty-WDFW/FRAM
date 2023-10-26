@@ -41,14 +41,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="FramVS.exe" size="1030656">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="FramVS.exe" size="1031680">
       <assemblyIdentity name="FramVS" version="1.0.0.0" language="neutral" processorArchitecture="x86" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <dsig:DigestValue>FdhjXC6CIcicraU50da1pORfZC8=</dsig:DigestValue>
+        <dsig:DigestValue>+++tOkH1t7fX930NOXA5l6ZJJDE=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -100,13 +100,25 @@
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="FramVS.exe.config" size="1618">
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="System.Data.SQLite.dll" size="451760">
+      <assemblyIdentity name="System.Data.SQLite" version="1.0.118.0" publicKeyToken="DB937BC2D44FF139" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+        <dsig:DigestValue>r9LztOoyRxwTrJ/dQ2lvAeh3ZCA=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="FramVS.exe.config" size="1893">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-      <dsig:DigestValue>99VuSHbJ31xcs6J/P7Yo+dzXNVE=</dsig:DigestValue>
+      <dsig:DigestValue>5Yj5fQXp9jBpRZ5TTL7ppuDw6Os=</dsig:DigestValue>
     </hash>
   </file>
 </asmv1:assembly>
