@@ -497,12 +497,12 @@ Public Class FVS_RunModel
          Exit Sub
       End If
       Me.Close()
-        FVS_AdminPassword.Visible = True
+        'FVS_AdminPassword.Visible = True
 
 
 
 
-   End Sub
+    End Sub
 
    '-///////////////////////////(*_*)\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ begin
    '- Pete 12/13 Subroutine required to iterate and find the right kFAT values, update RunEncounterRateAdjustment

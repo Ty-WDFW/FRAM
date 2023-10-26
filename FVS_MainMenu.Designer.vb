@@ -19,27 +19,22 @@ Partial Class FVS_MainMenu
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Me.Label1 = New System.Windows.Forms.Label
-        Me.Label3 = New System.Windows.Forms.Label
-        Me.FramVersionLabel = New System.Windows.Forms.Label
-        Me.OpenDB = New System.Windows.Forms.Button
-        Me.InputOptions = New System.Windows.Forms.Button
-        Me.ModelRun = New System.Windows.Forms.Button
-        Me.OutputResults = New System.Windows.Forms.Button
-        Me.PostSeason = New System.Windows.Forms.Button
-        Me.FVS_Exit = New System.Windows.Forms.Button
-        Me.OpenFVSdatabase = New System.Windows.Forms.OpenFileDialog
-        Me.DatabaseTextLabel = New System.Windows.Forms.Label
-        Me.RecordSetTextLabel = New System.Windows.Forms.Label
-        Me.RecordSetName = New System.Windows.Forms.Label
-        Me.DbName = New System.Windows.Forms.Label
-        Me.DatabaseNameLabel = New System.Windows.Forms.Label
-        Me.RecordSetNameLabel = New System.Windows.Forms.Label
-        Me.HelpProvider1 = New System.Windows.Forms.HelpProvider
-        Me.FramUtilButton = New System.Windows.Forms.Button
-        Me.SelectRecordset = New System.Windows.Forms.Button
-        Me.SaveInputButton = New System.Windows.Forms.Button
-        Me.VersionChangesButton = New System.Windows.Forms.Button
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
+        Me.FramVersionLabel = New System.Windows.Forms.Label()
+        Me.OpenDB = New System.Windows.Forms.Button()
+        Me.ModelRun = New System.Windows.Forms.Button()
+        Me.FVS_Exit = New System.Windows.Forms.Button()
+        Me.OpenFVSdatabase = New System.Windows.Forms.OpenFileDialog()
+        Me.DatabaseTextLabel = New System.Windows.Forms.Label()
+        Me.RecordSetTextLabel = New System.Windows.Forms.Label()
+        Me.RecordSetName = New System.Windows.Forms.Label()
+        Me.DbName = New System.Windows.Forms.Label()
+        Me.DatabaseNameLabel = New System.Windows.Forms.Label()
+        Me.RecordSetNameLabel = New System.Windows.Forms.Label()
+        Me.HelpProvider1 = New System.Windows.Forms.HelpProvider()
+        Me.SelectRecordset = New System.Windows.Forms.Button()
+        Me.RunBatch = New System.Windows.Forms.Button()
         Me.SuspendLayout()
         '
         'Label1
@@ -83,57 +78,22 @@ Partial Class FVS_MainMenu
         Me.OpenDB.Text = "Open Database"
         Me.OpenDB.UseVisualStyleBackColor = False
         '
-        'InputOptions
-        '
-        Me.InputOptions.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.InputOptions.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.InputOptions.Location = New System.Drawing.Point(279, 313)
-        Me.InputOptions.Name = "InputOptions"
-        Me.InputOptions.Size = New System.Drawing.Size(258, 50)
-        Me.InputOptions.TabIndex = 5
-        Me.InputOptions.Text = "Edit Model Run"
-        Me.InputOptions.UseVisualStyleBackColor = False
-        '
         'ModelRun
         '
         Me.ModelRun.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.ModelRun.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ModelRun.Location = New System.Drawing.Point(279, 451)
+        Me.ModelRun.Location = New System.Drawing.Point(279, 308)
         Me.ModelRun.Name = "ModelRun"
         Me.ModelRun.Size = New System.Drawing.Size(258, 50)
         Me.ModelRun.TabIndex = 6
         Me.ModelRun.Text = "Run Model "
         Me.ModelRun.UseVisualStyleBackColor = False
         '
-        'OutputResults
-        '
-        Me.OutputResults.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.OutputResults.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.OutputResults.Location = New System.Drawing.Point(278, 523)
-        Me.OutputResults.Name = "OutputResults"
-        Me.OutputResults.Size = New System.Drawing.Size(258, 50)
-        Me.OutputResults.TabIndex = 7
-        Me.OutputResults.Text = "Output / Results"
-        Me.OutputResults.UseVisualStyleBackColor = False
-        '
-        'PostSeason
-        '
-        Me.PostSeason.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.PostSeason.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.HelpProvider1.SetHelpString(Me.PostSeason, """Backwards"" FRAM using known catches and escapements")
-        Me.PostSeason.Location = New System.Drawing.Point(563, 451)
-        Me.PostSeason.Name = "PostSeason"
-        Me.HelpProvider1.SetShowHelp(Me.PostSeason, True)
-        Me.PostSeason.Size = New System.Drawing.Size(212, 50)
-        Me.PostSeason.TabIndex = 8
-        Me.PostSeason.Text = "Post Season Run"
-        Me.PostSeason.UseVisualStyleBackColor = False
-        '
         'FVS_Exit
         '
         Me.FVS_Exit.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.FVS_Exit.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FVS_Exit.Location = New System.Drawing.Point(278, 591)
+        Me.FVS_Exit.Location = New System.Drawing.Point(278, 457)
         Me.FVS_Exit.Name = "FVS_Exit"
         Me.FVS_Exit.Size = New System.Drawing.Size(258, 50)
         Me.FVS_Exit.TabIndex = 9
@@ -206,17 +166,6 @@ Partial Class FVS_MainMenu
         Me.RecordSetNameLabel.TabIndex = 15
         Me.RecordSetNameLabel.Text = "recordset name"
         '
-        'FramUtilButton
-        '
-        Me.FramUtilButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.FramUtilButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FramUtilButton.Location = New System.Drawing.Point(563, 243)
-        Me.FramUtilButton.Name = "FramUtilButton"
-        Me.FramUtilButton.Size = New System.Drawing.Size(212, 50)
-        Me.FramUtilButton.TabIndex = 16
-        Me.FramUtilButton.Text = "FRAM Utilities"
-        Me.FramUtilButton.UseVisualStyleBackColor = False
-        '
         'SelectRecordset
         '
         Me.SelectRecordset.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
@@ -228,27 +177,16 @@ Partial Class FVS_MainMenu
         Me.SelectRecordset.Text = "Select Model Run"
         Me.SelectRecordset.UseVisualStyleBackColor = False
         '
-        'SaveInputButton
+        'RunBatch
         '
-        Me.SaveInputButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.SaveInputButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.SaveInputButton.Location = New System.Drawing.Point(279, 382)
-        Me.SaveInputButton.Name = "SaveInputButton"
-        Me.SaveInputButton.Size = New System.Drawing.Size(258, 50)
-        Me.SaveInputButton.TabIndex = 18
-        Me.SaveInputButton.Text = "Save Model Run Inputs"
-        Me.SaveInputButton.UseVisualStyleBackColor = False
-        '
-        'VersionChangesButton
-        '
-        Me.VersionChangesButton.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.VersionChangesButton.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.VersionChangesButton.Location = New System.Drawing.Point(563, 174)
-        Me.VersionChangesButton.Name = "VersionChangesButton"
-        Me.VersionChangesButton.Size = New System.Drawing.Size(212, 50)
-        Me.VersionChangesButton.TabIndex = 19
-        Me.VersionChangesButton.Text = "FRAM Version Changes"
-        Me.VersionChangesButton.UseVisualStyleBackColor = False
+        Me.RunBatch.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
+        Me.RunBatch.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.RunBatch.Location = New System.Drawing.Point(279, 375)
+        Me.RunBatch.Name = "RunBatch"
+        Me.RunBatch.Size = New System.Drawing.Size(258, 50)
+        Me.RunBatch.TabIndex = 18
+        Me.RunBatch.Text = "Run Batch"
+        Me.RunBatch.UseVisualStyleBackColor = False
         '
         'FVS_MainMenu
         '
@@ -256,10 +194,8 @@ Partial Class FVS_MainMenu
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer))
         Me.ClientSize = New System.Drawing.Size(816, 701)
-        Me.Controls.Add(Me.VersionChangesButton)
-        Me.Controls.Add(Me.SaveInputButton)
+        Me.Controls.Add(Me.RunBatch)
         Me.Controls.Add(Me.SelectRecordset)
-        Me.Controls.Add(Me.FramUtilButton)
         Me.Controls.Add(Me.RecordSetNameLabel)
         Me.Controls.Add(Me.DatabaseNameLabel)
         Me.Controls.Add(Me.DbName)
@@ -267,10 +203,7 @@ Partial Class FVS_MainMenu
         Me.Controls.Add(Me.RecordSetTextLabel)
         Me.Controls.Add(Me.DatabaseTextLabel)
         Me.Controls.Add(Me.FVS_Exit)
-        Me.Controls.Add(Me.PostSeason)
-        Me.Controls.Add(Me.OutputResults)
         Me.Controls.Add(Me.ModelRun)
-        Me.Controls.Add(Me.InputOptions)
         Me.Controls.Add(Me.OpenDB)
         Me.Controls.Add(Me.FramVersionLabel)
         Me.Controls.Add(Me.Label3)
@@ -284,25 +217,20 @@ Partial Class FVS_MainMenu
         Me.PerformLayout()
 
     End Sub
-   Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents Label1 As System.Windows.Forms.Label
    Friend WithEvents Label3 As System.Windows.Forms.Label
    Friend WithEvents FramVersionLabel As System.Windows.Forms.Label
    Friend WithEvents OpenDB As System.Windows.Forms.Button
-   Friend WithEvents InputOptions As System.Windows.Forms.Button
-   Friend WithEvents ModelRun As System.Windows.Forms.Button
-   Friend WithEvents OutputResults As System.Windows.Forms.Button
-   Friend WithEvents PostSeason As System.Windows.Forms.Button
-   Friend WithEvents FVS_Exit As System.Windows.Forms.Button
-   Friend WithEvents OpenFVSdatabase As System.Windows.Forms.OpenFileDialog
-   Friend WithEvents DatabaseTextLabel As System.Windows.Forms.Label
-   Friend WithEvents RecordSetTextLabel As System.Windows.Forms.Label
-   Friend WithEvents RecordSetName As System.Windows.Forms.Label
-   Friend WithEvents DbName As System.Windows.Forms.Label
-   Friend WithEvents DatabaseNameLabel As System.Windows.Forms.Label
-   Friend WithEvents RecordSetNameLabel As System.Windows.Forms.Label
-   Friend WithEvents HelpProvider1 As System.Windows.Forms.HelpProvider
-   Friend WithEvents FramUtilButton As System.Windows.Forms.Button
-   Friend WithEvents SelectRecordset As System.Windows.Forms.Button
-   Friend WithEvents SaveInputButton As System.Windows.Forms.Button
-    Friend WithEvents VersionChangesButton As System.Windows.Forms.Button
+    Friend WithEvents ModelRun As System.Windows.Forms.Button
+    Friend WithEvents FVS_Exit As System.Windows.Forms.Button
+    Friend WithEvents OpenFVSdatabase As System.Windows.Forms.OpenFileDialog
+    Friend WithEvents DatabaseTextLabel As System.Windows.Forms.Label
+    Friend WithEvents RecordSetTextLabel As System.Windows.Forms.Label
+    Friend WithEvents RecordSetName As System.Windows.Forms.Label
+    Friend WithEvents DbName As System.Windows.Forms.Label
+    Friend WithEvents DatabaseNameLabel As System.Windows.Forms.Label
+    Friend WithEvents RecordSetNameLabel As System.Windows.Forms.Label
+    Friend WithEvents HelpProvider1 As System.Windows.Forms.HelpProvider
+    Friend WithEvents SelectRecordset As System.Windows.Forms.Button
+    Friend WithEvents RunBatch As Button
 End Class

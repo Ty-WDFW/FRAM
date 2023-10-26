@@ -1,4 +1,5 @@
 Imports System.Data.OleDb
+Imports System.Data.SQLite
 Imports System.Data
 Imports System.IO
 Imports System.Windows
@@ -67,8 +68,8 @@ Public Class FVS_MainMenu
 
 TryDBAgain:
       FVSdatabasename = ""
-      OpenFVSdatabase.Filter = "DataBase Files (*.mdb)|*.mdb|All files (*.*)|*.*"
-      OpenFVSdatabase.FilterIndex = 1
+        OpenFVSdatabase.Filter = "DataBase Files (*.db)|*.db|All files (*.*)|*.*"
+        OpenFVSdatabase.FilterIndex = 1
       OpenFVSdatabase.RestoreDirectory = True
       If OpenFVSdatabase.ShowDialog() = System.Windows.Forms.DialogResult.OK Then
          Try
@@ -79,31 +80,31 @@ TryDBAgain:
             MessageBox.Show("Cannot read file from disk. Original error: " & Ex.Message)
          End Try
       End If
-      If InStr(FVSdatabasename, "NewTransferModelRun.mdb") > 0 Or _
-         InStr(FVSdatabasename, "ModelRunTransfer.mdb") > 0 Then
-         MsgBox("You cannot use the NewTransferModelRun or ModelRunTransfer" & vbCrLf & _
-         "Databases because they are reserved for Run Transfer Operations" & vbCrLf & _
+        If InStr(FVSdatabasename, "NewTransferModelRun.db") > 0 Or
+         InStr(FVSdatabasename, "ModelRunTransfer.db") > 0 Then
+            MsgBox("You cannot use the NewTransferModelRun or ModelRunTransfer" & vbCrLf &
+         "Databases because they are reserved for Run Transfer Operations" & vbCrLf &
          "Please chose another Database", MsgBoxStyle.OkOnly)
-         GoTo TryDBAgain
-      End If
-      If FVSdatabasename.Length > 50 Then
+            GoTo TryDBAgain
+        End If
+        If FVSdatabasename.Length > 50 Then
          DatabaseNameLabel.Text = FVSshortname
       Else
          DatabaseNameLabel.Text = FVSdatabasename
       End If
       If FVSdatabasename = "" Then Exit Sub
 
-      ''- Auto Save Backup-Copy of Database File
-      'Me.Cursor = Cursors.WaitCursor
-      'DBNameLen = InStr(FVSdatabasename, "mdb")
-      'FVSdatabaseBackupName = FVSdatabasename.Substring(0, DBNameLen - 2) & "_AutoBackup.mdb"
-      'If Exists(FVSdatabaseBackupName) Then Delete(FVSdatabaseBackupName)
-      'File.Copy(FVSdatabasename, FVSdatabaseBackupName, True)
-      'Me.Cursor = Cursors.Default
+        ''- Auto Save Backup-Copy of Database File
+        'Me.Cursor = Cursors.WaitCursor
+        'DBNameLen = InStr(FVSdatabasename, "mdb")
+        'FVSdatabaseBackupName = FVSdatabasename.Substring(0, DBNameLen - 2) & "_AutoBackup.mdb"
+        'If Exists(FVSdatabaseBackupName) Then Delete(FVSdatabaseBackupName)
+        'File.Copy(FVSdatabasename, FVSdatabaseBackupName, True)
+        'Me.Cursor = Cursors.Default
 
-      '- DB Connection String
-        FramDB.ConnectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & FVSdatabasename
-      Me.Visible = False
+        '- DB Connection String
+        FramDB.ConnectionString = "Data Source=" & FVSdatabasename & ";Version=3;Compress=True;"
+        Me.Visible = False
 
 
 
@@ -112,18 +113,18 @@ TryDBAgain:
       '  and RunEncounterRateAdjustment table (SLRatio) 
       '- needed to use external sublegals; works to make things functional retroactively
       Dim sql As String       'SQL Query text string
-      Dim oledbAdapter As OleDb.OleDbDataAdapter
+        Dim SQLiteAdabater As SQLite.SQLiteDataAdapter
 
-      'First check the FRAM database for the SLRatio and RunEncounterRateAdjustment tables
-      FramDB.Open()
+        'First check the FRAM database for the SLRatio and RunEncounterRateAdjustment tables
+        FramDB.Open()
       Dim restrictions1(3) As String
       Dim restrictions2(3) As String
       Dim DoesTableExist1 As Boolean
       Dim DoesTableExist2 As Boolean
       restrictions1(2) = "SLRatio"
 
-      Dim dbTbl As DataTable = FramDB.GetSchema("Tables", restrictions1)
-      If dbTbl.Rows.Count = 0 Then
+        Dim dbTbl As DataTable = FramDB.GetSchema("Tables", restrictions1)
+        If dbTbl.Rows.Count = 0 Then
          'Table does not exist
          DoesTableExist1 = False
       Else
@@ -137,10 +138,10 @@ TryDBAgain:
       'If SLRatio doesn't exist, create it.
       If DoesTableExist1 = False Then
          sql = "CREATE TABLE SLRatio (RunID INTEGER,FisheryID INTEGER,Age INTEGER,TimeStep INTEGER,TargetRatio DOUBLE, RunEncounterRateAdjustment DOUBLE, UpdateWhen DATETIME, UpdateBy VARCHAR(255))"
-         'Now connect to the database and make the table...
-         'create a command
-         Dim my_Command As New OleDbCommand(sql, FramDB)
-         FramDB.Open()
+            'Now connect to the database and make the table...
+            'create a command
+            Dim my_Command As New SQLite.SQLiteCommand(sql, FramDB)
+            FramDB.Open()
          'command execute
          my_Command.ExecuteNonQuery()
          FramDB.Close()
@@ -162,99 +163,99 @@ TryDBAgain:
 
    End Sub
 
-   Private Sub InputOptions_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles InputOptions.Click
-      If FVSdatabasename = "" Then
-         MsgBox("Database and Model Run Must be Selected First !!!", MsgBoxStyle.OkOnly)
-         Exit Sub
-      End If
-      Me.Visible = False
-      FVS_InputMenu.ShowDialog()
-      Me.BringToFront()
-   End Sub
+    Private Sub InputOptions_Click(ByVal sender As Object, ByVal e As System.EventArgs)
+        If FVSdatabasename = "" Then
+            MsgBox("Database and Model Run Must be Selected First !!!", MsgBoxStyle.OkOnly)
+            Exit Sub
+        End If
+        Me.Visible = False
+        'FVS_InputMenu.ShowDialog()
+        Me.BringToFront()
+    End Sub
 
-   Private Sub ModelRun_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles ModelRun.Click
-      Dim Result As Integer
-      If FVSdatabasename = "" Then
-         MsgBox("Database and Model Run Must be Selected First !!!", MsgBoxStyle.OkOnly)
-         Exit Sub
-      End If
-      If ChangeAnyInput = True Or ChangeBackFram = True Or ChangeFishScalers = True Or _
-          ChangeNonRetention = True Or ChangePSCMaxER = True Or ChangeSizeLimit = True Or _
+    Private Sub ModelRun_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles ModelRun.Click
+        Dim Result As Integer
+        If FVSdatabasename = "" Then
+            MsgBox("Database and Model Run Must be Selected First !!!", MsgBoxStyle.OkOnly)
+            Exit Sub
+        End If
+        If ChangeAnyInput = True Or ChangeBackFram = True Or ChangeFishScalers = True Or
+          ChangeNonRetention = True Or ChangePSCMaxER = True Or ChangeSizeLimit = True Or
           ChangeStockFishScaler = True Or ChangeStockRecruit = True Then
-         ChangeAnyInput = True
-         Result = MsgBox("Input Values have been Changed!" & vbCrLf & "Changes Must be Saved before Running Model!!!" & vbCrLf & "Save Current Model Run ???", MsgBoxStyle.YesNo)
-         If Result = vbYes Then
-            'Call SaveModelRunInputs()
-            Me.Visible = False
-            FVS_SaveModelRunInputs.ShowDialog()
-            Me.Visible = True
-            RecordSetNameLabel.Text = RunIDNameSelect
-            Me.BringToFront()
-         Else
-            MsgBox("Please be aware that the OUTPUT for this run" & vbCrLf & "cannot be duplicated without saving your INPUT values", MsgBoxStyle.OkOnly)
-         End If
-      End If
-      Me.Visible = False
-      FVS_RunModel.ShowDialog()
-      Me.BringToFront()
-   End Sub
+            ChangeAnyInput = True
+            Result = MsgBox("Input Values have been Changed!" & vbCrLf & "Changes Must be Saved before Running Model!!!" & vbCrLf & "Save Current Model Run ???", MsgBoxStyle.YesNo)
+            If Result = vbYes Then
+                'Call SaveModelRunInputs()
+                Me.Visible = False
+                FVS_SaveModelRunInputs.ShowDialog()
+                Me.Visible = True
+                RecordSetNameLabel.Text = RunIDNameSelect
+                Me.BringToFront()
+            Else
+                MsgBox("Please be aware that the OUTPUT for this run" & vbCrLf & "cannot be duplicated without saving your INPUT values", MsgBoxStyle.OkOnly)
+            End If
+        End If
+        Me.Visible = False
+        FVS_RunModel.ShowDialog()
+        Me.BringToFront()
+    End Sub
 
-   Private Sub FramUtilButton_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles FramUtilButton.Click
-      If FVSdatabasename = "" Then
-         MsgBox("Database and Model Run Must be Selected First !!!", MsgBoxStyle.OkOnly)
-         Exit Sub
-      End If
-      Me.Visible = False
+    Private Sub FramUtilButton_Click(ByVal sender As Object, ByVal e As System.EventArgs)
+        If FVSdatabasename = "" Then
+            MsgBox("Database and Model Run Must be Selected First !!!", MsgBoxStyle.OkOnly)
+            Exit Sub
+        End If
+        Me.Visible = False
 
-      FVS_FramUtils.ShowDialog()
-      RecordSetNameLabel.Text = RunIDNameSelect
-      Me.BringToFront()
-   End Sub
+        'FVS_FramUtils.ShowDialog()
+        RecordSetNameLabel.Text = RunIDNameSelect
+        Me.BringToFront()
+    End Sub
 
-   Private Sub OutputResults_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles OutputResults.Click
-      If FVSdatabasename = "" Then
-         MsgBox("Database and Model Run Must be Selected First !!!", MsgBoxStyle.OkOnly)
-         Exit Sub
-      End If
-      Me.Visible = False
-      FVS_Output.ShowDialog()
-      Me.Refresh()
-      Me.BringToFront()
-   End Sub
+    Private Sub OutputResults_Click(ByVal sender As Object, ByVal e As System.EventArgs)
+        If FVSdatabasename = "" Then
+            MsgBox("Database and Model Run Must be Selected First !!!", MsgBoxStyle.OkOnly)
+            Exit Sub
+        End If
+        Me.Visible = False
+        'FVS_Output.ShowDialog()
+        Me.Refresh()
+        Me.BringToFront()
+    End Sub
 
-   Private Sub PostSeason_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles PostSeason.Click
-      If FVSdatabasename = "" Then
-         MsgBox("Database and Model Run Must be Selected First !!!", MsgBoxStyle.OkOnly)
-         Exit Sub
-      End If
-      Me.Visible = False
-      FVS_BackwardsFram.ShowDialog()
-      Me.BringToFront()
-   End Sub
+    Private Sub PostSeason_Click(ByVal sender As Object, ByVal e As System.EventArgs)
+        If FVSdatabasename = "" Then
+            MsgBox("Database and Model Run Must be Selected First !!!", MsgBoxStyle.OkOnly)
+            Exit Sub
+        End If
+        Me.Visible = False
+        'FVS_BackwardsFram.ShowDialog()
+        Me.BringToFront()
+    End Sub
 
-   Private Sub SelectRecordset_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles SelectRecordset.Click
-      If FVSdatabasename = "" Then
-         MsgBox("Database and Model Run Must be Selected First !!!", MsgBoxStyle.OkOnly)
-         Exit Sub
-      End If
-      RecordsetSelectionType = 1
-      Me.Visible = False
-      FVS_ModelRunSelection.ShowDialog()
-      Me.Visible = True
-      Me.BringToFront()
-      RecordSetNameLabel.Text = RunIDNameSelect
-      If RunIDSelect = 0 Then
-         FVSdatabasename = ""
-      End If
-   End Sub
+    Private Sub SelectRecordset_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles SelectRecordset.Click
+        If FVSdatabasename = "" Then
+            MsgBox("Database and Model Run Must be Selected First !!!", MsgBoxStyle.OkOnly)
+            Exit Sub
+        End If
+        RecordsetSelectionType = 1
+        Me.Visible = False
+        FVS_ModelRunSelection.ShowDialog()
+        Me.Visible = True
+        Me.BringToFront()
+        RecordSetNameLabel.Text = RunIDNameSelect
+        If RunIDSelect = 0 Then
+            FVSdatabasename = ""
+        End If
+    End Sub
 
-   Private Sub SaveInputButton_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles SaveInputButton.Click
-      If FVSdatabasename = "" Then
-         MsgBox("Database and Model Run Must be Selected First !!!", MsgBoxStyle.OkOnly)
-         Exit Sub
-      End If
-        If ChangeAnyInput = True Or ChangeBackFram = True Or ChangeFishScalers = True Or _
-           ChangeNonRetention = True Or ChangePSCMaxER = True Or ChangeSizeLimit = True Or _
+    Private Sub SaveInputButton_Click(ByVal sender As Object, ByVal e As System.EventArgs)
+        If FVSdatabasename = "" Then
+            MsgBox("Database and Model Run Must be Selected First !!!", MsgBoxStyle.OkOnly)
+            Exit Sub
+        End If
+        If ChangeAnyInput = True Or ChangeBackFram = True Or ChangeFishScalers = True Or
+           ChangeNonRetention = True Or ChangePSCMaxER = True Or ChangeSizeLimit = True Or
            ChangeStockFishScaler = True Or ChangeStockRecruit = True Or AnyChange = True Then
             ChangeAnyInput = True
         Else
@@ -262,20 +263,20 @@ TryDBAgain:
             Exit Sub
         End If
 
-      Me.Visible = False
-      FVS_SaveModelRunInputs.ShowDialog()
-      Me.Visible = True
-      RecordSetNameLabel.Text = RunIDNameSelect
-      Me.BringToFront()
+        Me.Visible = False
+        FVS_SaveModelRunInputs.ShowDialog()
+        Me.Visible = True
+        RecordSetNameLabel.Text = RunIDNameSelect
+        Me.BringToFront()
 
-   End Sub
+    End Sub
 
-   Private Sub VersionChangesButton_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles VersionChangesButton.Click
-      Me.Visible = False
-      FVS_VersionChanges.ShowDialog()
-      Me.Visible = True
-      Me.BringToFront()
-   End Sub
+    Private Sub VersionChangesButton_Click(ByVal sender As Object, ByVal e As System.EventArgs)
+        Me.Visible = False
+        'FVS_VersionChanges.ShowDialog()
+        Me.Visible = True
+        Me.BringToFront()
+    End Sub
 
     Private Sub RecordSetNameLabel_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles RecordSetNameLabel.Click
 
@@ -283,5 +284,9 @@ TryDBAgain:
 
     Private Sub OpenFVSdatabase_FileOk(ByVal sender As System.Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles OpenFVSdatabase.FileOk
 
+    End Sub
+
+    Private Sub RunBatch_Click(sender As Object, e As EventArgs) Handles RunBatch.Click
+        MsgBox("Test")
     End Sub
 End Class

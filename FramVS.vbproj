@@ -121,139 +121,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
-    <Compile Include="FVS_ActiveRateScaler.Designer.vb">
-      <DependentUpon>FVS_ActiveRateScaler.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_ActiveRateScaler.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_AdminPassword.Designer.vb">
-      <DependentUpon>FVS_AdminPassword.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_AdminPassword.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_BPTransfer.Designer.vb">
-      <DependentUpon>FVS_BPTransfer.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_BPTransfer.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_MultiDelete.Designer.vb">
-      <DependentUpon>FVS_MultiDelete.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_MultiDelete.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_Coweeman.Designer.vb">
-      <DependentUpon>FVS_Coweeman.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_Coweeman.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_VersionChanges.Designer.vb">
-      <DependentUpon>FVS_VersionChanges.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_VersionChanges.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="FramCalcs.vb" />
     <Compile Include="FramOutput.vb" />
     <Compile Include="FramUtils.vb" />
-    <Compile Include="FVS_BackwardsFram.Designer.vb">
-      <DependentUpon>FVS_BackwardsFram.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_BackwardsFram.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_BackwardsResults.Designer.vb">
-      <DependentUpon>FVS_BackwardsResults.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_BackwardsResults.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_BackwardsTarget.Designer.vb">
-      <DependentUpon>FVS_BackwardsTarget.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_BackwardsTarget.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_BackwardsYearSelect.Designer.vb">
-      <DependentUpon>FVS_BackwardsYearSelect.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_BackwardsYearSelect.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_BasePeriodSelect.Designer.vb">
-      <DependentUpon>FVS_BasePeriodSelect.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_BasePeriodSelect.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_FisheryMultiGroupSelect.Designer.vb">
-      <DependentUpon>FVS_FisheryMultiGroupSelect.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_FisheryMultiGroupSelect.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_FisheryScalerScreen.Designer.vb">
-      <DependentUpon>FVS_FisheryScalerScreen.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_FisheryScalerScreen.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_FishStkCompScreen.Designer.vb">
-      <DependentUpon>FVS_FishStkCompScreen.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_FishStkCompScreen.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_MortalityReport.Designer.vb">
-      <DependentUpon>FVS_MortalityReport.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_MortalityReport.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_EditRecordSetInfo.Designer.vb">
-      <DependentUpon>FVS_EditRecordSetInfo.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_EditRecordSetInfo.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_FisheryScalerEdit.Designer.vb">
-      <DependentUpon>FVS_FisheryScalerEdit.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_FisheryScalerEdit.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_FisherySelect.Designer.vb">
-      <DependentUpon>FVS_FisherySelect.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_FisherySelect.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_FramUtils.Designer.vb">
-      <DependentUpon>FVS_FramUtils.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_FramUtils.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_InputMenu.Designer.vb">
-      <DependentUpon>FVS_InputMenu.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_InputMenu.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="FVS_MainMenu.Designer.vb">
       <DependentUpon>FVS_MainMenu.vb</DependentUpon>
     </Compile>
     <Compile Include="FVS_MainMenu.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_PopStatScreen.Designer.vb">
-      <DependentUpon>FVS_PopStatScreen.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_PopStatScreen.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FVS_RunModel.Designer.vb">
@@ -262,99 +136,16 @@
     <Compile Include="FVS_RunModel.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FVS_MortalityTypeSelection.Designer.vb">
-      <DependentUpon>FVS_MortalityTypeSelection.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_MortalityTypeSelection.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_NonRetentionEdit.Designer.vb">
-      <DependentUpon>FVS_NonRetentionEdit.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_NonRetentionEdit.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_Output.Designer.vb">
-      <DependentUpon>FVS_Output.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_Output.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_OutputDriver.Designer.vb">
-      <DependentUpon>FVS_OutputDriver.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_OutputDriver.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_OutputDriverSelection.Designer.vb">
-      <DependentUpon>FVS_OutputDriverSelection.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_OutputDriverSelection.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_PSCCohoERScreen.Designer.vb">
-      <DependentUpon>FVS_PSCCohoERScreen.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_PSCCohoERScreen.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_PSCMaxER.Designer.vb">
-      <DependentUpon>FVS_PSCMaxER.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_PSCMaxER.vb">
-    </Compile>
     <Compile Include="FVS_ModelRunSelection.Designer.vb">
       <DependentUpon>FVS_ModelRunSelection.vb</DependentUpon>
     </Compile>
     <Compile Include="FVS_ModelRunSelection.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FVS_ReportSelection.Designer.vb">
-      <DependentUpon>FVS_ReportSelection.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_ReportSelection.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="FVS_SaveModelRunInputs.Designer.vb">
       <DependentUpon>FVS_SaveModelRunInputs.vb</DependentUpon>
     </Compile>
     <Compile Include="FVS_SaveModelRunInputs.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_ScreenReports.Designer.vb">
-      <DependentUpon>FVS_ScreenReports.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_ScreenReports.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_SelectiveFisheryScreen.Designer.vb">
-      <DependentUpon>FVS_SelectiveFisheryScreen.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_SelectiveFisheryScreen.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_SizeLimitEdit.Designer.vb">
-      <DependentUpon>FVS_SizeLimitEdit.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_SizeLimitEdit.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_StockImpactsPer1000Screen.Designer.vb">
-      <DependentUpon>FVS_StockImpactsPer1000Screen.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_StockImpactsPer1000Screen.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_StockSelect.designer.vb">
-      <DependentUpon>FVS_StockSelect.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_StockSelect.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_TRunTimeSteps.Designer.vb">
-      <DependentUpon>FVS_TRunTimeSteps.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_TRunTimeSteps.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FVS_Welcome.vb">
@@ -380,181 +171,29 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="FVS_StockRecruitEdit.Designer.vb">
-      <DependentUpon>FVS_StockRecruitEdit.vb</DependentUpon>
+    <Compile Include="FVS_sqlite.Designer.vb">
+      <DependentUpon>FVS_sqlite.vb</DependentUpon>
     </Compile>
-    <Compile Include="FVS_StockRecruitEdit.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FVS_StockFisheryScalerEdit.Designer.vb">
-      <DependentUpon>FVS_StockFisheryScalerEdit.vb</DependentUpon>
-    </Compile>
-    <Compile Include="FVS_StockFisheryScalerEdit.vb">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="sqlite_testing.Designer.vb">
-      <DependentUpon>sqlite_testing.vb</DependentUpon>
-    </Compile>
-    <Compile Include="sqlite_testing.vb">
+    <Compile Include="FVS_sqlite.vb">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="FVS_ActiveRateScaler.resx">
-      <DependentUpon>FVS_ActiveRateScaler.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_AdminPassword.resx">
-      <DependentUpon>FVS_AdminPassword.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_BPTransfer.resx">
-      <DependentUpon>FVS_BPTransfer.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_MultiDelete.resx">
-      <DependentUpon>FVS_MultiDelete.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_Coweeman.resx">
-      <DependentUpon>FVS_Coweeman.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_VersionChanges.resx">
-      <DependentUpon>FVS_VersionChanges.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_BackwardsFram.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_BackwardsFram.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_BackwardsResults.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_BackwardsResults.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_BackwardsTarget.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_BackwardsTarget.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_BackwardsYearSelect.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_BackwardsYearSelect.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_BasePeriodSelect.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_BasePeriodSelect.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_FisheryMultiGroupSelect.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_FisheryMultiGroupSelect.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_FisheryScalerScreen.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_FisheryScalerScreen.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_FishStkCompScreen.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_FishStkCompScreen.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_MortalityReport.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_MortalityReport.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_EditRecordSetInfo.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_EditRecordSetInfo.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_FisheryScalerEdit.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_FisheryScalerEdit.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_FisherySelect.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_FisherySelect.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_FramUtils.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_FramUtils.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_InputMenu.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_InputMenu.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="FVS_MainMenu.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FVS_MainMenu.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_PopStatScreen.resx">
-      <DependentUpon>FVS_PopStatScreen.vb</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FVS_RunModel.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FVS_RunModel.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FVS_MortalityTypeSelection.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_MortalityTypeSelection.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_NonRetentionEdit.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_NonRetentionEdit.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_Output.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_Output.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_OutputDriver.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_OutputDriver.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_OutputDriverSelection.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_OutputDriverSelection.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_PSCCohoERScreen.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_PSCCohoERScreen.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_PSCMaxER.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_PSCMaxER.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="FVS_ModelRunSelection.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FVS_ModelRunSelection.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FVS_ReportSelection.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_ReportSelection.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="FVS_SaveModelRunInputs.resx">
       <SubType>Designer</SubType>
       <DependentUpon>FVS_SaveModelRunInputs.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_ScreenReports.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_ScreenReports.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_SelectiveFisheryScreen.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_SelectiveFisheryScreen.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_SizeLimitEdit.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_SizeLimitEdit.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_StockImpactsPer1000Screen.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_StockImpactsPer1000Screen.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_StockSelect.resx">
-      <DependentUpon>FVS_StockSelect.vb</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_TRunTimeSteps.resx">
-      <DependentUpon>FVS_TRunTimeSteps.vb</DependentUpon>
-      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FVS_Welcome.resx">
       <SubType>Designer</SubType>
@@ -566,16 +205,8 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="FVS_StockRecruitEdit.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_StockRecruitEdit.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FVS_StockFisheryScalerEdit.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>FVS_StockFisheryScalerEdit.vb</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="sqlite_testing.resx">
-      <DependentUpon>sqlite_testing.vb</DependentUpon>
+    <EmbeddedResource Include="FVS_sqlite.resx">
+      <DependentUpon>FVS_sqlite.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
