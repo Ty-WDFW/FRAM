@@ -35,6 +35,7 @@ Partial Class FVS_MainMenu
         Me.HelpProvider1 = New System.Windows.Forms.HelpProvider()
         Me.SelectRecordset = New System.Windows.Forms.Button()
         Me.RunBatch = New System.Windows.Forms.Button()
+        Me.Label2 = New System.Windows.Forms.Label()
         Me.SuspendLayout()
         '
         'Label1
@@ -93,7 +94,7 @@ Partial Class FVS_MainMenu
         '
         Me.FVS_Exit.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.FVS_Exit.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.FVS_Exit.Location = New System.Drawing.Point(278, 457)
+        Me.FVS_Exit.Location = New System.Drawing.Point(278, 465)
         Me.FVS_Exit.Name = "FVS_Exit"
         Me.FVS_Exit.Size = New System.Drawing.Size(258, 50)
         Me.FVS_Exit.TabIndex = 9
@@ -110,7 +111,7 @@ Partial Class FVS_MainMenu
         '
         Me.DatabaseTextLabel.AutoSize = True
         Me.DatabaseTextLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.DatabaseTextLabel.Location = New System.Drawing.Point(41, 651)
+        Me.DatabaseTextLabel.Location = New System.Drawing.Point(54, 538)
         Me.DatabaseTextLabel.Name = "DatabaseTextLabel"
         Me.DatabaseTextLabel.Size = New System.Drawing.Size(61, 13)
         Me.DatabaseTextLabel.TabIndex = 10
@@ -120,7 +121,7 @@ Partial Class FVS_MainMenu
         '
         Me.RecordSetTextLabel.AutoSize = True
         Me.RecordSetTextLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RecordSetTextLabel.Location = New System.Drawing.Point(41, 685)
+        Me.RecordSetTextLabel.Location = New System.Drawing.Point(54, 572)
         Me.RecordSetTextLabel.Name = "RecordSetTextLabel"
         Me.RecordSetTextLabel.Size = New System.Drawing.Size(67, 13)
         Me.RecordSetTextLabel.TabIndex = 11
@@ -130,7 +131,7 @@ Partial Class FVS_MainMenu
         '
         Me.RecordSetName.AutoSize = True
         Me.RecordSetName.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RecordSetName.Location = New System.Drawing.Point(231, 685)
+        Me.RecordSetName.Location = New System.Drawing.Point(244, 572)
         Me.RecordSetName.Name = "RecordSetName"
         Me.RecordSetName.Size = New System.Drawing.Size(0, 13)
         Me.RecordSetName.TabIndex = 12
@@ -139,7 +140,7 @@ Partial Class FVS_MainMenu
         '
         Me.DbName.AutoSize = True
         Me.DbName.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.DbName.Location = New System.Drawing.Point(231, 651)
+        Me.DbName.Location = New System.Drawing.Point(244, 538)
         Me.DbName.Name = "DbName"
         Me.DbName.Size = New System.Drawing.Size(0, 13)
         Me.DbName.TabIndex = 13
@@ -149,7 +150,7 @@ Partial Class FVS_MainMenu
         Me.DatabaseNameLabel.AutoSize = True
         Me.DatabaseNameLabel.BackColor = System.Drawing.Color.Yellow
         Me.DatabaseNameLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.DatabaseNameLabel.Location = New System.Drawing.Point(124, 651)
+        Me.DatabaseNameLabel.Location = New System.Drawing.Point(137, 538)
         Me.DatabaseNameLabel.Name = "DatabaseNameLabel"
         Me.DatabaseNameLabel.Size = New System.Drawing.Size(119, 17)
         Me.DatabaseNameLabel.TabIndex = 14
@@ -160,7 +161,7 @@ Partial Class FVS_MainMenu
         Me.RecordSetNameLabel.AutoSize = True
         Me.RecordSetNameLabel.BackColor = System.Drawing.Color.Yellow
         Me.RecordSetNameLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.RecordSetNameLabel.Location = New System.Drawing.Point(124, 685)
+        Me.RecordSetNameLabel.Location = New System.Drawing.Point(137, 572)
         Me.RecordSetNameLabel.Name = "RecordSetNameLabel"
         Me.RecordSetNameLabel.Size = New System.Drawing.Size(121, 17)
         Me.RecordSetNameLabel.TabIndex = 15
@@ -185,15 +186,27 @@ Partial Class FVS_MainMenu
         Me.RunBatch.Name = "RunBatch"
         Me.RunBatch.Size = New System.Drawing.Size(258, 50)
         Me.RunBatch.TabIndex = 18
-        Me.RunBatch.Text = "Run Batch"
+        Me.RunBatch.Text = "Batch Run"
         Me.RunBatch.UseVisualStyleBackColor = False
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 15.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Location = New System.Drawing.Point(274, 428)
+        Me.Label2.Name = "Label2"
+        Me.Label2.Size = New System.Drawing.Size(272, 25)
+        Me.Label2.TabIndex = 19
+        Me.Label2.Text = "Running run number X of Y"
+        Me.Label2.Visible = False
         '
         'FVS_MainMenu
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
         Me.AutoScroll = True
         Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.ClientSize = New System.Drawing.Size(816, 701)
+        Me.ClientSize = New System.Drawing.Size(833, 600)
+        Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.RunBatch)
         Me.Controls.Add(Me.SelectRecordset)
         Me.Controls.Add(Me.RecordSetNameLabel)
@@ -233,4 +246,5 @@ Partial Class FVS_MainMenu
     Friend WithEvents HelpProvider1 As System.Windows.Forms.HelpProvider
     Friend WithEvents SelectRecordset As System.Windows.Forms.Button
     Friend WithEvents RunBatch As Button
+    Friend WithEvents Label2 As Label
 End Class

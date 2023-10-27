@@ -166,11 +166,11 @@ Public Class FVS_ModelRunSelection
       FillRunList()
    End Sub
 
-   Public Sub GetRunVariables(ByVal BaseNum As Integer, ByVal RunNum As Integer)
+    Public Sub GetRunVariables(ByVal BaseNum As Integer, ByVal RunNum As Integer)
 
-      Dim FramDA As New System.Data.SQLite.SQLiteDataAdapter
-      Dim CmdStr As String
-      Dim RunIDNum, RecNum, FoundBaseID, Result As Integer
+        Dim FramDA As New System.Data.SQLite.SQLiteDataAdapter
+        Dim CmdStr As String
+        Dim RunIDNum, RecNum, FoundBaseID, Result As Integer
         Dim drd1 As SQLite.SQLiteDataReader
         Dim RunYear As String
         Dim cmd1 As New SQLite.SQLiteCommand()
@@ -178,23 +178,23 @@ Public Class FVS_ModelRunSelection
 
         Me.Cursor = Cursors.WaitCursor
 
-      ModelRunBPSelect = False
+        ModelRunBPSelect = False
 
-      '- Set Common Variables for Pre-Terminal and Terminal States
-      PTerm = 0
-      Term = 1
+        '- Set Common Variables for Pre-Terminal and Terminal States
+        PTerm = 0
+        Term = 1
 
-      '- Open Text File for RunTime Messages
-      File_Name = FVSdatabasepath & "\FramBaseCheck.Txt"
+        '- Open Text File for RunTime Messages
+        File_Name = FVSdatabasepath & "\FramBaseCheck.Txt"
 
-      If Exists(File_Name) Then
-         'rssw.Close()
-         Delete(File_Name)
-      End If
-      rssw = CreateText(File_Name)
-      PrnLine = "Command File =" + FVSdatabasepath + "\" & RunIDNameSelect.ToString & "     " & Date.Now.ToString
-      rssw.WriteLine(PrnLine)
-      rssw.WriteLine(" ")
+        If Exists(File_Name) Then
+            'rssw.Close()
+            Delete(File_Name)
+        End If
+        rssw = CreateText(File_Name)
+        PrnLine = "Command File =" + FVSdatabasepath + "\" & RunIDNameSelect.ToString & "     " & Date.Now.ToString
+        rssw.WriteLine(PrnLine)
+        rssw.WriteLine(" ")
 
         Dim FramDB As New SQLite.SQLiteConnection("Data Source=" & FVSdatabasename & ";Version=3;Compress=True;")
         FramDB.Open()
@@ -202,88 +202,88 @@ Public Class FVS_ModelRunSelection
 
         '- Read BASE PERIOD Selection
         cmd1.CommandText = "SELECT * FROM BaseID WHERE BasePeriodID = " & BaseNum.ToString
-      drd1 = cmd1.ExecuteReader
-      FoundBaseID = 0
-      Do While drd1.Read()
-         FoundBaseID = 1
-         Exit Do
-      Loop
-      If FoundBaseID = 0 Then
-         '- Can't Find Base Period ID Record for this RunID (Deleted??)
-         Result = MsgBox("Can't find the Base Period ID for this Model Run!" & vbCrLf & "Do you want to Choose another Base Period ???", MsgBoxStyle.YesNo)
-         If Result = vbNo Then
+        drd1 = cmd1.ExecuteReader
+        FoundBaseID = 0
+        Do While drd1.Read()
+            FoundBaseID = 1
+            Exit Do
+        Loop
+        If FoundBaseID = 0 Then
+            '- Can't Find Base Period ID Record for this RunID (Deleted??)
+            Result = MsgBox("Can't find the Base Period ID for this Model Run!" & vbCrLf & "Do you want to Choose another Base Period ???", MsgBoxStyle.YesNo)
+            If Result = vbNo Then
+                FramDB.Close()
+                rssw.Close()
+                Me.Cursor = Cursors.Default
+                Exit Sub
+            End If
+            '- Choose Base Period for this "Orphan" RunID
             FramDB.Close()
-            rssw.Close()
-            Me.Cursor = Cursors.Default
-            Exit Sub
-         End If
-         '- Choose Base Period for this "Orphan" RunID
-         FramDB.Close()
-         ModelRunBPSelect = True
+            ModelRunBPSelect = True
             'FVS_BasePeriodSelect.ShowDialog()
             Me.BringToFront()
-         If BasePeriodIDSelect = 0 Then
-            FramDB.Close()
-            rssw.Close()
-            Exit Sub
-         Else
-            '- Change RunID Record to point at new Base Period Selection
-            FramDB.Open()
-            CmdStr = "SELECT * FROM RunID WHERE RunID = " & RunIDSelect.ToString & ";"
-            Dim RIDcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
-            Dim RunIDDA As New System.Data.SQLite.SQLiteDataAdapter
-            RunIDDA.SelectCommand = RIDcm
-            Dim RIDcb As New SQLite.SQLiteCommandBuilder
-            RIDcb = New SQLite.SQLiteCommandBuilder(RunIDDA)
-            If FramDataSet.Tables.Contains("RunID") Then
-               FramDataSet.Tables("RunID").Clear()
-            End If
+            If BasePeriodIDSelect = 0 Then
+                FramDB.Close()
+                rssw.Close()
+                Exit Sub
+            Else
+                '- Change RunID Record to point at new Base Period Selection
+                FramDB.Open()
+                CmdStr = "SELECT * FROM RunID WHERE RunID = " & RunIDSelect.ToString & ";"
+                Dim RIDcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+                Dim RunIDDA As New System.Data.SQLite.SQLiteDataAdapter
+                RunIDDA.SelectCommand = RIDcm
+                Dim RIDcb As New SQLite.SQLiteCommandBuilder
+                RIDcb = New SQLite.SQLiteCommandBuilder(RunIDDA)
+                If FramDataSet.Tables.Contains("RunID") Then
+                    FramDataSet.Tables("RunID").Clear()
+                End If
                 RunIDDA.Fill(FramDataSet, "RunID") '**************************************
-   
-            Dim NumRID As Integer
-            NumRID = FramDataSet.Tables("RunID").Rows.Count
-            If NumRID <> 1 Then
-               MsgBox("ERROR in RunID Table of Database ... Duplicate Record", MsgBoxStyle.OkOnly)
-            End If
-            FramDataSet.Tables("RunID").Rows(0)(5) = BasePeriodIDSelect
-            RunIDDA.Update(FramDataSet, "RunID")
-            RunIDDA = Nothing
-            ' ReRead New Base Period Record Selection
-            cmd1.CommandText = "SELECT * FROM BaseID WHERE BasePeriodID = " & BasePeriodIDSelect.ToString
-            drd1 = cmd1.ExecuteReader
-            drd1.Read()
-         End If
-      End If
 
-      BasePeriodID = drd1.GetInt32(1)
-      BasePeriodIDSelect = BasePeriodID
-      BasePeriodName = drd1.GetString(2)
-      SpeciesName = drd1.GetString(3)
-      NumStk = drd1.GetInt32(4)
-      NumFish = drd1.GetInt32(5)
-      NumSteps = drd1.GetInt32(6)
-      NumAge = drd1.GetInt32(7)
-      MinAge = drd1.GetInt32(8)
-      MaxAge = drd1.GetInt32(9)
+                Dim NumRID As Integer
+                NumRID = FramDataSet.Tables("RunID").Rows.Count
+                If NumRID <> 1 Then
+                    MsgBox("ERROR in RunID Table of Database ... Duplicate Record", MsgBoxStyle.OkOnly)
+                End If
+                FramDataSet.Tables("RunID").Rows(0)(5) = BasePeriodIDSelect
+                RunIDDA.Update(FramDataSet, "RunID")
+                RunIDDA = Nothing
+                ' ReRead New Base Period Record Selection
+                cmd1.CommandText = "SELECT * FROM BaseID WHERE BasePeriodID = " & BasePeriodIDSelect.ToString
+                drd1 = cmd1.ExecuteReader
+                drd1.Read()
+            End If
+        End If
+
+        BasePeriodID = drd1.GetInt32(1)
+        BasePeriodIDSelect = BasePeriodID
+        BasePeriodName = drd1.GetString(2)
+        SpeciesName = drd1.GetString(3)
+        NumStk = drd1.GetInt32(4)
+        NumFish = drd1.GetInt32(5)
+        NumSteps = drd1.GetInt32(6)
+        NumAge = drd1.GetInt32(7)
+        MinAge = drd1.GetInt32(8)
+        MaxAge = drd1.GetInt32(9)
         'BasePeriodDate = drd1.GetDateTime(10)
         BasePeriodComments = drd1.GetString(11)
-      StockVersion = drd1.GetInt32(12)
-      FisheryVersion = drd1.GetInt32(13)
-      TimeStepVersion = drd1.GetInt32(14)
+        StockVersion = drd1.GetInt32(12)
+        FisheryVersion = drd1.GetInt32(13)
+        TimeStepVersion = drd1.GetInt32(14)
         'cmd1.Dispose()
         drd1.Dispose()
 
-      '- Text File Printing
-      Dim sb As New StringBuilder
+        '- Text File Printing
+        Dim sb As New StringBuilder
 
-      '- ReDim Base Arrays
-      Call ReDimBaseArrays()
+        '- ReDim Base Arrays
+        Call ReDimBaseArrays()
 
-      '- ReDim Calculation and Input Arrays
-      Call ReDimCalcArrays()
+        '- ReDim Calculation and Input Arrays
+        Call ReDimCalcArrays()
 
-      '- Read RUN Selection Variables
-      
+        '- Read RUN Selection Variables
+
         '*****************************************************************************************************
         Dim RunIDTable As String = "RunID"
         CmdStr = "SELECT * FROM [" & RunIDTable & "];"
@@ -294,11 +294,11 @@ Public Class FVS_ModelRunSelection
         RunID1cb = New SQLite.SQLiteCommandBuilder(RunID1DA)
         RunID1DA.Fill(FramDataSet, "RunID")
 
-       
+
         'Dim col As DataColumn
 
         Dim i As Integer = 1
-       
+
         i = FramDataSet.Tables(RunIDTable).Columns.IndexOf("RunYear")
         If i = -1 Then 'This Column is missing so add it
             RunID1cm.CommandText = "ALTER TABLE " & RunIDTable & " ADD " & "RunYear" & " " & "String"
@@ -330,7 +330,7 @@ Public Class FVS_ModelRunSelection
             RunID1cm.ExecuteNonQuery()   'executes the SQL code in cmd without querry
         End If
 
-        
+
 
         '*****************************************************************
 
@@ -831,7 +831,7 @@ Public Class FVS_ModelRunSelection
             If (column.ColumnName) = "MSFFisheryScaleFactor" Then GoTo FoundNewColumn
         Next
         'Next
-        MsgBox("Wrong Format for Database Table 'FisheryScalers' !!!!" & vbCrLf & "You have the WRONG Type database (ie Old Version VS)" & vbCrLf & _
+        MsgBox("Wrong Format for Database Table 'FisheryScalers' !!!!" & vbCrLf & "You have the WRONG Type database (ie Old Version VS)" & vbCrLf &
                "Please Choose Another Database to use" & vbCrLf & "with this Version of FramVS (Multiple MSF)", MsgBoxStyle.OkOnly)
         End
 FoundNewColumn:
@@ -1324,7 +1324,7 @@ SkipCalcArrays:
 
     End Sub
 
-   Private Sub TransferButton_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles TransferButton.Click
+    Private Sub TransferButton_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles TransferButton.Click
 
       Dim Num As Integer
       NumTransferID = ListBox1.SelectedItems.Count
