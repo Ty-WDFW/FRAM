@@ -30,8 +30,8 @@ Public Class FVS_SaveModelRunInputs
 
    Private Sub SMRSaveButton_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles SMRSaveButton.Click
       RecordsetSelectionType = 5
-      FVS_EditRecordSetInfo.ShowDialog()
-      If RecordsetSelectionType = -5 Then
+        'FVS_EditRecordSetInfo.ShowDialog()
+        If RecordsetSelectionType = -5 Then
          MsgBox("Recordset COPY & SAVE Cancelled", MsgBoxStyle.OkOnly)
          Me.Close()
          FVS_MainMenu.Visible = True
@@ -43,8 +43,8 @@ Public Class FVS_SaveModelRunInputs
       Call SaveModelRunInputs()
       Me.Close()
       If BackFramSave = True Then
-         FVS_BackwardsFram.Visible = True
-         BackFramSave = False
+            'FVS_BackwardsFram.Visible = True
+            BackFramSave = False
       Else
          FVS_MainMenu.Visible = True
       End If
@@ -56,8 +56,8 @@ Public Class FVS_SaveModelRunInputs
       Call SaveModelRunInputs()
       Me.Close()
       If BackFramSave = True Then
-         FVS_BackwardsFram.Visible = True
-         BackFramSave = False
+            'FVS_BackwardsFram.Visible = True
+            BackFramSave = False
       Else
          FVS_MainMenu.Visible = True
       End If

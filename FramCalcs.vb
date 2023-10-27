@@ -5,6 +5,7 @@ Imports System.Text
 Imports System.IO.File
 Imports Microsoft.Office.Interop
 Imports System.Data.OleDb
+Imports System.Data.SQLite
 Imports System.Data
 Imports System.Globalization
 
@@ -3277,7 +3278,9 @@ SelctFsh:
         FVS_RunModel.BringToFront()
         FVS_RunModel.Refresh()
 
-        Dim FishMortDA As New System.Data.OleDb.OleDbDataAdapter
+        'Dim FramDB As New SQLite.SQLiteConnection("Data Source=" & FVSdatabasename & ";Version=3;Compress=True;")
+
+        Dim FishMortDA As New System.Data.SQLite.SQLiteDataAdapter
         Dim NonRetEnc As String
         '*************************************Produce Output of NR Encounters************************************
         'NonRetEnc = FVSdatabasepath & "\" & RunIDYearSelect & "NonRetention.txt"
@@ -3287,24 +3290,25 @@ SelctFsh:
 
 
         CmdStr = "SELECT * FROM Mortality WHERE RunID = " & RunIDSelect.ToString & " ORDER BY StockID, Age, FisheryID, TimeStep"
-        Dim FMcm As New OleDb.OleDbCommand(CmdStr, FramDB)
+        Dim FMcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
         FishMortDA.SelectCommand = FMcm
 
-        CmdStr = "DELETE * FROM Mortality WHERE RunID = " & RunIDSelect.ToString & ";"
-        Dim FMDcm As New OleDb.OleDbCommand(CmdStr, FramDB)
+        CmdStr = "DELETE FROM Mortality WHERE RunID = " & RunIDSelect.ToString & ";"
+        Dim FMDcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
         FishMortDA.DeleteCommand = FMDcm
 
-        Dim FMcb As New OleDb.OleDbCommandBuilder
-        FMcb = New OleDb.OleDbCommandBuilder(FishMortDA)
+        Dim FMcb As New SQLite.SQLiteCommandBuilder
+        FMcb = New SQLite.SQLiteCommandBuilder(FishMortDA)
 
         StartTime = DateTime.Now
 
         '- MORTALITY DataBase Table Save --------
-        Dim FramTrans As OleDb.OleDbTransaction
-        Dim FIC As New OleDbCommand
+        'Dim FramTrans As SQLite.SQLiteTransaction
+        Dim FramTrans As SQLite.SQLiteTransaction
+        Dim FIC As New SQLiteCommand
         Dim RCount As Integer
         FramDB.Open()
-        FishMortDA.DeleteCommand.ExecuteScalar()
+        FishMortDA.DeleteCommand.ExecuteNonQuery()
         FramTrans = FramDB.BeginTransaction
         FIC.Connection = FramDB
         FIC.Transaction = FramTrans
@@ -3314,28 +3318,28 @@ SelctFsh:
             FVS_RunModel.BringToFront()
             FVS_RunModel.Refresh()
             FVS_RunModel.MRProgressBar.Refresh()
-         For Age As Integer = 1 To MaxAge
-            For Fish As Integer = 1 To NumFish
-               For TimeStep = 1 To NumSteps
-                  MortSum = LandedCatch(Stk, Age, Fish, TimeStep) + NonRetention(Stk, Age, Fish, TimeStep) + Shakers(Stk, Age, Fish, TimeStep) + DropOff(Stk, Age, Fish, TimeStep) + MSFLandedCatch(Stk, Age, Fish, TimeStep) + MSFNonRetention(Stk, Age, Fish, TimeStep) + MSFShakers(Stk, Age, Fish, TimeStep) + MSFDropOff(Stk, Age, Fish, TimeStep)
-                  If MortSum <> 0 Then
-                     RCount += 1
-                     FIC.CommandText = "INSERT INTO Mortality (PrimaryKey,RunID,StockID,Age,FisheryID,TimeStep,LandedCatch,NonRetention,Shaker,DropOff,Encounter,MSFLandedCatch,MSFNonRetention,MSFShaker,MSFDropOff,MSFEncounter) " & _
-                     "VALUES(" & RCount.ToString & "," & _
-                     RunIDSelect.ToString & "," & _
-                     Stk.ToString & "," & _
-                     Age.ToString & "," & _
-                     Fish.ToString & "," & _
-                     TimeStep.ToString & "," & _
-                     LandedCatch(Stk, Age, Fish, TimeStep).ToString("######0.000000") & "," & _
-                     NonRetention(Stk, Age, Fish, TimeStep).ToString("######0.000000") & "," & _
-                     Shakers(Stk, Age, Fish, TimeStep).ToString("######0.000000") & "," & _
-                     DropOff(Stk, Age, Fish, TimeStep).ToString("######0.000000") & "," & _
-                     Encounters(Stk, Age, Fish, TimeStep).ToString("######0.000000") & "," & _
-                     MSFLandedCatch(Stk, Age, Fish, TimeStep).ToString("######0.000000") & "," & _
-                     MSFNonRetention(Stk, Age, Fish, TimeStep).ToString("######0.000000") & "," & _
-                     MSFShakers(Stk, Age, Fish, TimeStep).ToString("######0.000000") & "," & _
-                     MSFDropOff(Stk, Age, Fish, TimeStep).ToString("######0.000000") & "," & _
+            For Age As Integer = 1 To MaxAge
+                For Fish As Integer = 1 To NumFish
+                    For TimeStep = 1 To NumSteps
+                        MortSum = LandedCatch(Stk, Age, Fish, TimeStep) + NonRetention(Stk, Age, Fish, TimeStep) + Shakers(Stk, Age, Fish, TimeStep) + DropOff(Stk, Age, Fish, TimeStep) + MSFLandedCatch(Stk, Age, Fish, TimeStep) + MSFNonRetention(Stk, Age, Fish, TimeStep) + MSFShakers(Stk, Age, Fish, TimeStep) + MSFDropOff(Stk, Age, Fish, TimeStep)
+                        If MortSum <> 0 Then
+                            RCount += 1
+                            FIC.CommandText = "INSERT INTO Mortality (PrimaryKey,RunID,StockID,Age,FisheryID,TimeStep,LandedCatch,NonRetention,Shaker,DropOff,Encounter,MSFLandedCatch,MSFNonRetention,MSFShaker,MSFDropOff,MSFEncounter) " &
+                     "VALUES(" & RCount.ToString & "," &
+                     RunIDSelect.ToString & "," &
+                     Stk.ToString & "," &
+                     Age.ToString & "," &
+                     Fish.ToString & "," &
+                     TimeStep.ToString & "," &
+                     LandedCatch(Stk, Age, Fish, TimeStep).ToString("######0.000000") & "," &
+                     NonRetention(Stk, Age, Fish, TimeStep).ToString("######0.000000") & "," &
+                     Shakers(Stk, Age, Fish, TimeStep).ToString("######0.000000") & "," &
+                     DropOff(Stk, Age, Fish, TimeStep).ToString("######0.000000") & "," &
+                     Encounters(Stk, Age, Fish, TimeStep).ToString("######0.000000") & "," &
+                     MSFLandedCatch(Stk, Age, Fish, TimeStep).ToString("######0.000000") & "," &
+                     MSFNonRetention(Stk, Age, Fish, TimeStep).ToString("######0.000000") & "," &
+                     MSFShakers(Stk, Age, Fish, TimeStep).ToString("######0.000000") & "," &
+                     MSFDropOff(Stk, Age, Fish, TimeStep).ToString("######0.000000") & "," &
                      MSFEncounters(Stk, Age, Fish, TimeStep).ToString("######0.000000") & ")"
                             FIC.ExecuteNonQuery()
                             '""If NRLegal(1, Stk, Age, Fish, TimeStep) > 0 Then
@@ -3346,8 +3350,8 @@ SelctFsh:
                             'End If
                         End If
                     Next
+                Next
             Next
-         Next
         Next
         'FileClose(53)
         FramTrans.Commit()
@@ -3366,20 +3370,20 @@ SelctFsh:
         FVS_RunModel.Refresh()
 
         CmdStr = "SELECT * FROM Cohort WHERE RunID = " & RunIDSelect.ToString & " ORDER BY StockID, Age, TimeStep"
-        Dim COHcm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        Dim CohortDA As New System.Data.OleDb.OleDbDataAdapter
+        Dim COHcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        Dim CohortDA As New System.Data.SQLite.SQLiteDataAdapter
         CohortDA.SelectCommand = COHcm
 
-        CmdStr = "DELETE * FROM Cohort WHERE RunID = " & RunIDSelect.ToString & ";"
-        Dim COHDcm As New OleDb.OleDbCommand(CmdStr, FramDB)
+        CmdStr = "DELETE FROM Cohort WHERE RunID = " & RunIDSelect.ToString & ";"
+        Dim COHDcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
         CohortDA.DeleteCommand = COHDcm
 
-        Dim COHcb As New OleDb.OleDbCommandBuilder
-        COHcb = New OleDb.OleDbCommandBuilder(CohortDA)
+        Dim COHcb As New SQLite.SQLiteCommandBuilder
+        COHcb = New SQLite.SQLiteCommandBuilder(CohortDA)
         'CohortDA.Fill(FramDataSet, "CohortSizes")
 
-        Dim CohTrans As OleDb.OleDbTransaction
-        Dim FCC As New OleDbCommand
+        Dim CohTrans As SQLite.SQLiteTransaction
+        Dim FCC As New SQLite.SQLiteCommand
 
         FramDB.Open()
         CohortDA.DeleteCommand.ExecuteScalar()
@@ -3387,26 +3391,26 @@ SelctFsh:
         FCC.Connection = FramDB
         FCC.Transaction = CohTrans
 
-      For Stk As Integer = 1 To NumStk
-         For Age As Integer = MinAge To MaxAge
-            For TimeStep = 1 To NumSteps
-               If Cohort(Stk, Age, 3, TimeStep) <> 0 Or Cohort(Stk, Age, 1, TimeStep) <> 0 Then
-                  FCC.CommandText = "INSERT INTO Cohort (RunID,StockID,Age,TimeStep,Cohort,MatureCohort,StartCohort,WorkingCohort,MidCohort) " & _
-                  "VALUES(" & RunIDSelect.ToString & "," & _
-                  Stk.ToString & "," & _
-                  Age.ToString & "," & _
-                  TimeStep.ToString & "," & _
-                  Cohort(Stk, Age, 0, TimeStep).ToString("######0.000000") & "," & _
-                  Cohort(Stk, Age, 1, TimeStep).ToString("######0.000000") & "," & _
-                  Cohort(Stk, Age, 4, TimeStep).ToString("######0.000000") & "," & _
-                  Cohort(Stk, Age, 3, TimeStep).ToString("######0.000000") & "," & _
+        For Stk As Integer = 1 To NumStk
+            For Age As Integer = MinAge To MaxAge
+                For TimeStep = 1 To NumSteps
+                    If Cohort(Stk, Age, 3, TimeStep) <> 0 Or Cohort(Stk, Age, 1, TimeStep) <> 0 Then
+                        FCC.CommandText = "INSERT INTO Cohort (RunID,StockID,Age,TimeStep,Cohort,MatureCohort,StartCohort,WorkingCohort,MidCohort) " &
+                  "VALUES(" & RunIDSelect.ToString & "," &
+                  Stk.ToString & "," &
+                  Age.ToString & "," &
+                  TimeStep.ToString & "," &
+                  Cohort(Stk, Age, 0, TimeStep).ToString("######0.000000") & "," &
+                  Cohort(Stk, Age, 1, TimeStep).ToString("######0.000000") & "," &
+                  Cohort(Stk, Age, 4, TimeStep).ToString("######0.000000") & "," &
+                  Cohort(Stk, Age, 3, TimeStep).ToString("######0.000000") & "," &
                   Cohort(Stk, Age, 2, TimeStep).ToString("######0.000000") & ")"
-                  FCC.ExecuteNonQuery()
+                        FCC.ExecuteNonQuery()
 
-               End If
+                    End If
+                Next
             Next
-         Next
-      Next
+        Next
         CohTrans.Commit()
         FramDB.Close()
 
@@ -3421,41 +3425,41 @@ SelctFsh:
         FVS_RunModel.RunProgressLabel.Refresh()
 
         CmdStr = "SELECT * FROM Escapement WHERE RunID = " & RunIDSelect.ToString & " ORDER BY StockID, Age, TimeStep"
-        Dim ESCcm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        Dim EscapeDA As New System.Data.OleDb.OleDbDataAdapter
+        Dim ESCcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        Dim EscapeDA As New System.Data.SQLite.SQLiteDataAdapter
         EscapeDA.SelectCommand = ESCcm
 
-        CmdStr = "DELETE * FROM Escapement WHERE RunID = " & RunIDSelect.ToString & ";"
-        Dim ESCDcm As New OleDb.OleDbCommand(CmdStr, FramDB)
+        CmdStr = "DELETE FROM Escapement WHERE RunID = " & RunIDSelect.ToString & ";"
+        Dim ESCDcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
         EscapeDA.DeleteCommand = ESCDcm
 
-        Dim ESCcb As New OleDb.OleDbCommandBuilder
-        ESCcb = New OleDb.OleDbCommandBuilder(EscapeDA)
+        Dim ESCcb As New SQLite.SQLiteCommandBuilder
+        ESCcb = New SQLite.SQLiteCommandBuilder(EscapeDA)
         'EscapeDA.Fill(FramDataSet, "Escapement")
 
-        Dim ESCTrans As OleDb.OleDbTransaction
-        Dim FEC As New OleDbCommand
+        Dim ESCTrans As SQLite.SQLiteTransaction
+        Dim FEC As New SQLite.SQLiteCommand
 
         FramDB.Open()
         EscapeDA.DeleteCommand.ExecuteScalar()
         ESCTrans = FramDB.BeginTransaction
         FEC.Connection = FramDB
         FEC.Transaction = ESCTrans
-      For Stk As Integer = 1 To NumStk
-         For Age As Integer = MinAge To MaxAge
-            For TimeStep = 1 To NumSteps
-               If Escape(Stk, Age, TimeStep) <> 0 Then
-                  FEC.CommandText = "INSERT INTO Escapement (RunID,StockID,Age,TimeStep,Escapement) " & _
-                  "VALUES(" & RunIDSelect.ToString & "," & _
-                  Stk.ToString & "," & _
-                  Age.ToString & "," & _
-                  TimeStep.ToString & "," & _
+        For Stk As Integer = 1 To NumStk
+            For Age As Integer = MinAge To MaxAge
+                For TimeStep = 1 To NumSteps
+                    If Escape(Stk, Age, TimeStep) <> 0 Then
+                        FEC.CommandText = "INSERT INTO Escapement (RunID,StockID,Age,TimeStep,Escapement) " &
+                  "VALUES(" & RunIDSelect.ToString & "," &
+                  Stk.ToString & "," &
+                  Age.ToString & "," &
+                  TimeStep.ToString & "," &
                   Escape(Stk, Age, TimeStep).ToString("######0.000000") & ")"
-                  FEC.ExecuteNonQuery()
-               End If
+                        FEC.ExecuteNonQuery()
+                    End If
+                Next
             Next
-         Next
-      Next
+        Next
         ESCTrans.Commit()
         FramDB.Close()
 
@@ -3464,12 +3468,12 @@ SelctFsh:
         '- UPDATE RunID RunModified Field
 
         CmdStr = "SELECT * FROM RunID WHERE RunID = " & RunIDSelect.ToString & ";"
-        Dim RIDcm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        Dim RunIDDA As New System.Data.OleDb.OleDbDataAdapter
+        Dim RIDcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        Dim RunIDDA As New System.Data.SQLite.SQLiteDataAdapter
         RunIDDA.SelectCommand = RIDcm
 
-        Dim RIDcb As New OleDb.OleDbCommandBuilder
-        RIDcb = New OleDb.OleDbCommandBuilder(RunIDDA)
+        Dim RIDcb As New SQLite.SQLiteCommandBuilder
+        RIDcb = New SQLite.SQLiteCommandBuilder(RunIDDA)
         If FramDataSet.Tables.Contains("RunID") Then
             FramDataSet.Tables("RunID").Clear()
         End If
@@ -3479,9 +3483,9 @@ SelctFsh:
         If NumRID <> 1 Then
             MsgBox("ERROR in RunID Table of Database ... Duplicate Record", MsgBoxStyle.OkOnly)
         End If
-        FramDataSet.Tables("RunID").Rows(0)(9) = DateTime.Now
+        FramDataSet.Tables("RunID").Rows(0)(9) = 1
 
-      '*********************Begin Pete 2/27/13 BC Flag Change to Run Name
+        '*********************Begin Pete 2/27/13 BC Flag Change to Run Name
 
         'If SpeciesName = "COHO" Then
         FramDataSet.Tables("RunID").Rows(0)(3) = RunIDNameSelect
@@ -3507,19 +3511,19 @@ SelctFsh:
         '- Update FisheryScaler Field in FisheryScalers Table for Quota Fisheries
 
         CmdStr = "SELECT * FROM FisheryScalers WHERE RunID = " & RunIDSelect.ToString & " ORDER BY FisheryID, TimeStep"
-        Dim FSHcm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        Dim FishDA As New System.Data.OleDb.OleDbDataAdapter
+        Dim FSHcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        Dim FishDA As New System.Data.SQLite.SQLiteDataAdapter
         FishDA.SelectCommand = FSHcm
 
-        CmdStr = "DELETE * FROM FisheryScalers WHERE RunID = " & RunIDSelect.ToString & ";"
-        Dim FSHDcm As New OleDb.OleDbCommand(CmdStr, FramDB)
+        CmdStr = "DELETE FROM FisheryScalers WHERE RunID = " & RunIDSelect.ToString & ";"
+        Dim FSHDcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
         FishDA.DeleteCommand = FSHDcm
 
-        Dim FSHcb As New OleDb.OleDbCommandBuilder
-        FSHcb = New OleDb.OleDbCommandBuilder(FishDA)
+        Dim FSHcb As New SQLite.SQLiteCommandBuilder
+        FSHcb = New SQLite.SQLiteCommandBuilder(FishDA)
 
-        Dim FSHTrans As OleDb.OleDbTransaction
-        Dim FSH As New OleDbCommand
+        Dim FSHTrans As SQLite.SQLiteTransaction
+        Dim FSH As New SQLite.SQLiteCommand
 
         FramDB.Open()
         FishDA.DeleteCommand.ExecuteScalar()
@@ -3528,18 +3532,18 @@ SelctFsh:
         FSH.Transaction = FSHTrans
         For Fish As Integer = 1 To NumFish
             For TimeStep = 1 To NumSteps
-                FSH.CommandText = "INSERT INTO FisheryScalers (RunID,FisheryID,TimeStep,FisheryFlag,FisheryScaleFactor,Quota,MSFFisheryScaleFactor,MSFQuota,MarkReleaseRate,MarkMisIDRate,UnMarkMisIDRate,MarkIncidentalRate) " & _
-                   "VALUES(" & RunIDSelect.ToString & "," & _
-                   Fish.ToString & "," & _
-                   TimeStep.ToString & "," & _
-                   FisheryFlag(Fish, TimeStep).ToString & "," & _
-                   FisheryScaler(Fish, TimeStep).ToString("0.0000") & "," & _
-                   FisheryQuota(Fish, TimeStep).ToString("######0.00000") & "," & _
-                   MSFFisheryScaler(Fish, TimeStep).ToString("0.0000") & "," & _
-                   MSFFisheryQuota(Fish, TimeStep).ToString("######0.00000") & "," & _
-                   MarkSelectiveMortRate(Fish, TimeStep).ToString("0.0000") & "," & _
-                   MarkSelectiveMarkMisID(Fish, TimeStep).ToString("0.0000") & "," & _
-                   MarkSelectiveUnMarkMisID(Fish, TimeStep).ToString("0.0000") & "," & _
+                FSH.CommandText = "INSERT INTO FisheryScalers (RunID,FisheryID,TimeStep,FisheryFlag,FisheryScaleFactor,Quota,MSFFisheryScaleFactor,MSFQuota,MarkReleaseRate,MarkMisIDRate,UnMarkMisIDRate,MarkIncidentalRate) " &
+                   "VALUES(" & RunIDSelect.ToString & "," &
+                   Fish.ToString & "," &
+                   TimeStep.ToString & "," &
+                   FisheryFlag(Fish, TimeStep).ToString & "," &
+                   FisheryScaler(Fish, TimeStep).ToString("0.0000") & "," &
+                   FisheryQuota(Fish, TimeStep).ToString("######0.00000") & "," &
+                   MSFFisheryScaler(Fish, TimeStep).ToString("0.0000") & "," &
+                   MSFFisheryQuota(Fish, TimeStep).ToString("######0.00000") & "," &
+                   MarkSelectiveMortRate(Fish, TimeStep).ToString("0.0000") & "," &
+                   MarkSelectiveMarkMisID(Fish, TimeStep).ToString("0.0000") & "," &
+                   MarkSelectiveUnMarkMisID(Fish, TimeStep).ToString("0.0000") & "," &
                    MarkSelectiveIncRate(Fish, TimeStep).ToString("0.0000") & ")"
                 FSH.ExecuteNonQuery()
             Next
@@ -3549,19 +3553,19 @@ SelctFsh:
 
         '- Save Total FisheryMortality Table 
         CmdStr = "SELECT * FROM FisheryMortality WHERE RunID = " & RunIDSelect.ToString & " ORDER BY StockID, Age, TimeStep"
-        Dim TFMcm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        Dim TFMDA As New System.Data.OleDb.OleDbDataAdapter
+        Dim TFMcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        Dim TFMDA As New System.Data.SQLite.SQLiteDataAdapter
         TFMDA.SelectCommand = TFMcm
 
-        CmdStr = "DELETE * FROM FisheryMortality WHERE RunID = " & RunIDSelect.ToString & ";"
-        Dim TFMDcm As New OleDb.OleDbCommand(CmdStr, FramDB)
+        CmdStr = "DELETE FROM FisheryMortality WHERE RunID = " & RunIDSelect.ToString & ";"
+        Dim TFMDcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
         TFMDA.DeleteCommand = TFMDcm
 
-        Dim TFMcb As New OleDb.OleDbCommandBuilder
-        TFMcb = New OleDb.OleDbCommandBuilder(EscapeDA)
+        Dim TFMcb As New SQLite.SQLiteCommandBuilder
+        TFMcb = New SQLite.SQLiteCommandBuilder(EscapeDA)
 
-        Dim TFMTrans As OleDb.OleDbTransaction
-        Dim TFM As New OleDbCommand
+        Dim TFMTrans As SQLite.SQLiteTransaction
+        Dim TFM As New SQLite.SQLiteCommand
 
         FramDB.Open()
         TFMDA.DeleteCommand.ExecuteScalar()
@@ -3573,15 +3577,15 @@ SelctFsh:
             For TimeStep = 1 To NumSteps
                 TotFM = TotalLandedCatch(Fish, TimeStep) + TotalLandedCatch(NumFish + Fish, TimeStep) + TotalEncounters(Fish, TimeStep) + TotalShakers(Fish, TimeStep) + TotalDropOff(Fish, TimeStep) + TotalNonRetention(Fish, TimeStep)
                 If TotFM <> 0 Then
-                    TFM.CommandText = "INSERT INTO FisheryMortality (RunID,FisheryID,TimeStep,TotalLandedCatch,TotalUnMarkedCatch,TotalNonRetention,TotalShakers,TotalDropOff,TotalEncounters) " & _
-                    "VALUES(" & RunIDSelect.ToString & "," & _
-                    Fish.ToString & "," & _
-                    TimeStep.ToString & "," & _
-                    TotalLandedCatch(Fish, TimeStep).ToString("#######0.000000") & "," & _
-                    TotalLandedCatch(NumFish + Fish, TimeStep).ToString("#######0.000000") & "," & _
-                    TotalNonRetention(Fish, TimeStep).ToString("#######0.000000") & "," & _
-                    TotalShakers(Fish, TimeStep).ToString("#######0.000000") & "," & _
-                    TotalDropOff(Fish, TimeStep).ToString("#######0.000000") & "," & _
+                    TFM.CommandText = "INSERT INTO FisheryMortality (RunID,FisheryID,TimeStep,TotalLandedCatch,TotalUnMarkedCatch,TotalNonRetention,TotalShakers,TotalDropOff,TotalEncounters) " &
+                    "VALUES(" & RunIDSelect.ToString & "," &
+                    Fish.ToString & "," &
+                    TimeStep.ToString & "," &
+                    TotalLandedCatch(Fish, TimeStep).ToString("#######0.000000") & "," &
+                    TotalLandedCatch(NumFish + Fish, TimeStep).ToString("#######0.000000") & "," &
+                    TotalNonRetention(Fish, TimeStep).ToString("#######0.000000") & "," &
+                    TotalShakers(Fish, TimeStep).ToString("#######0.000000") & "," &
+                    TotalDropOff(Fish, TimeStep).ToString("#######0.000000") & "," &
                     TotalEncounters(Fish, TimeStep).ToString("#######0.000000") & ")"
                     TFM.ExecuteNonQuery()
                 End If
@@ -3597,14 +3601,14 @@ SelctFsh:
 
         If (SpeciesName = "CHINOOK" And UpdateRunEncounterRateAdjustment = True And FinalUpdatePass = True) Then
 
-            CmdStr = "DELETE * FROM SLRatio WHERE RunID = " & RunIDSelect.ToString & ";"
-            Dim SLRatDcm As New OleDb.OleDbCommand(CmdStr, FramDB)
-            Dim SLRatDA As New System.Data.OleDb.OleDbDataAdapter
+            CmdStr = "DELETE FROM SLRatio WHERE RunID = " & RunIDSelect.ToString & ";"
+            Dim SLRatDcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+            Dim SLRatDA As New System.Data.SQLite.SQLiteDataAdapter
             SLRatDA.DeleteCommand = SLRatDcm
 
 
             '- SLRatio DataBase Table Save --------
-            Dim SLRatC As New OleDbCommand
+            Dim SLRatC As New SQLite.SQLiteCommand
             FramDB.Open()
             SLRatDA.DeleteCommand.ExecuteScalar()
             FramTrans = FramDB.BeginTransaction
@@ -3615,14 +3619,14 @@ SelctFsh:
                     For TimeStep = 1 To NumSteps
                         'Uncomment the If end if content if cluttering with 1.00 is undesired; for now, testing, leave it in...
                         If TargetRatio(Fish, Age, TimeStep) <> -1 Then
-                            SLRatC.CommandText = "INSERT INTO SLRatio (RunID,FisheryID,Age,TimeStep,TargetRatio,RunEncounterRateAdjustment,UpdateWhen,UpdateBy) " & _
-                            "VALUES(" & RunIDSelect.ToString & "," & _
-                            Fish.ToString & "," & _
-                            Age.ToString & "," & _
-                            TimeStep.ToString & "," & _
-                            TargetRatio(Fish, Age, TimeStep).ToString & "," & _
-                            RunEncounterRateAdjustment(Fish, Age, TimeStep).ToString & "," & _
-                            "'" & DateTime.Now.ToString & "'" & "," & _
+                            SLRatC.CommandText = "INSERT INTO SLRatio (RunID,FisheryID,Age,TimeStep,TargetRatio,RunEncounterRateAdjustment,UpdateWhen,UpdateBy) " &
+                            "VALUES(" & RunIDSelect.ToString & "," &
+                            Fish.ToString & "," &
+                            Age.ToString & "," &
+                            TimeStep.ToString & "," &
+                            TargetRatio(Fish, Age, TimeStep).ToString & "," &
+                            RunEncounterRateAdjustment(Fish, Age, TimeStep).ToString & "," &
+                            "'" & DateTime.Now.ToString & "'" & "," &
                             "'" & WhoUpdated.ToString & "'" & ")"
                             SLRatC.ExecuteNonQuery()
                         End If
@@ -3758,17 +3762,17 @@ SelctFsh:
 
         '-ADD IN FRESHWATER-NET and FRESHWATER-SPORT CATCH TO GET EXTREME TERMINAL RUN.
 
-      For Fish As Integer = 72 To 73
-         For Area = 1 To 7
-            For Stk As Integer = StartStk(Area) To StopStk(Area)
-               For TStep As Integer = 1 To NumSteps
-                  For Age As Integer = 3 To MaxAge   '--- Only age 3-5 Fish in Freshwater
-                     TammTermRun(Area) = TammTermRun(Area) + LandedCatch(Stk, Age, Fish, TStep) + MSFLandedCatch(Stk, Age, Fish, TStep)
-                  Next Age
-               Next TStep
-            Next Stk
-         Next Area
-      Next Fish
+        For Fish As Integer = 72 To 73
+            For Area = 1 To 7
+                For Stk As Integer = StartStk(Area) To StopStk(Area)
+                    For TStep As Integer = 1 To NumSteps
+                        For Age As Integer = 3 To MaxAge   '--- Only age 3-5 Fish in Freshwater
+                            TammTermRun(Area) = TammTermRun(Area) + LandedCatch(Stk, Age, Fish, TStep) + MSFLandedCatch(Stk, Age, Fish, TStep)
+                        Next Age
+                    Next TStep
+                Next Stk
+            Next Area
+        Next Fish
 
         '----- ADD IN Time Period 3 CATCHES FOR TERMINAL AREA NET FISHERIES -----
 
@@ -3884,21 +3888,21 @@ SkipNoSnt2:
         If FisheryScaler(52, 3) = 0.99 Then
             TammEstimate(7, 3) = 0
             TammEstimate(8, 3) = 0
-         For Age As Integer = MinAge To 5
-            TotalLandedCatch(51, 3) = TotalLandedCatch(51, 3) - LandedCatch(10, Age, 51, 3) - MSFLandedCatch(10, Age, 51, 3)
-            TotalDropOff(51, 3) = TotalDropOff(51, 3) - DropOff(10, Age, 51, 3) - MSFDropOff(10, Age, 51, 3)
-            TotalLandedCatch(52, 3) = TotalLandedCatch(52, 3) - LandedCatch(10, Age, 52, 3) - MSFLandedCatch(10, Age, 52, 3)
-            TotalDropOff(52, 3) = TotalDropOff(52, 3) - DropOff(10, Age, 52, 3) - MSFDropOff(10, Age, 52, 3)
-            DropOff(10, Age, 52, 3) = (Escape(10, Age, 3) * (1 - FisheryScaler(51, 3))) * IncidentalRate(52, 3)
-            DropOff(10, Age, 51, 3) = (Escape(10, Age, 3) * FisheryScaler(51, 3)) * IncidentalRate(51, 3)
-            TotalDropOff(52, 3) = TotalDropOff(52, 3) + DropOff(10, Age, 52, 3) + MSFDropOff(10, Age, 52, 3)
-            TotalDropOff(51, 3) = TotalDropOff(51, 3) + DropOff(10, Age, 51, 3) + MSFDropOff(10, Age, 51, 3)
-            LandedCatch(10, Age, 52, 3) = (Escape(10, Age, 3) - DropOff(10, Age, 52, 3) - DropOff(10, Age, 51, 3) - MSFDropOff(10, Age, 52, 3) - MSFDropOff(10, Age, 51, 3)) * (1 - FisheryScaler(51, 3))
-            LandedCatch(10, Age, 51, 3) = (Escape(10, Age, 3) - DropOff(10, Age, 52, 3) - DropOff(10, Age, 51, 3) - MSFDropOff(10, Age, 52, 3) - MSFDropOff(10, Age, 51, 3)) * FisheryScaler(51, 3)
-            TotalLandedCatch(52, 3) = TotalLandedCatch(52, 3) + LandedCatch(10, Age, 52, 3) + MSFLandedCatch(10, Age, 52, 3)
-            TotalLandedCatch(51, 3) = TotalLandedCatch(51, 3) + LandedCatch(10, Age, 51, 3) + MSFLandedCatch(10, Age, 51, 3)
-            Escape(10, Age, 3) = 0
-         Next Age
+            For Age As Integer = MinAge To 5
+                TotalLandedCatch(51, 3) = TotalLandedCatch(51, 3) - LandedCatch(10, Age, 51, 3) - MSFLandedCatch(10, Age, 51, 3)
+                TotalDropOff(51, 3) = TotalDropOff(51, 3) - DropOff(10, Age, 51, 3) - MSFDropOff(10, Age, 51, 3)
+                TotalLandedCatch(52, 3) = TotalLandedCatch(52, 3) - LandedCatch(10, Age, 52, 3) - MSFLandedCatch(10, Age, 52, 3)
+                TotalDropOff(52, 3) = TotalDropOff(52, 3) - DropOff(10, Age, 52, 3) - MSFDropOff(10, Age, 52, 3)
+                DropOff(10, Age, 52, 3) = (Escape(10, Age, 3) * (1 - FisheryScaler(51, 3))) * IncidentalRate(52, 3)
+                DropOff(10, Age, 51, 3) = (Escape(10, Age, 3) * FisheryScaler(51, 3)) * IncidentalRate(51, 3)
+                TotalDropOff(52, 3) = TotalDropOff(52, 3) + DropOff(10, Age, 52, 3) + MSFDropOff(10, Age, 52, 3)
+                TotalDropOff(51, 3) = TotalDropOff(51, 3) + DropOff(10, Age, 51, 3) + MSFDropOff(10, Age, 51, 3)
+                LandedCatch(10, Age, 52, 3) = (Escape(10, Age, 3) - DropOff(10, Age, 52, 3) - DropOff(10, Age, 51, 3) - MSFDropOff(10, Age, 52, 3) - MSFDropOff(10, Age, 51, 3)) * (1 - FisheryScaler(51, 3))
+                LandedCatch(10, Age, 51, 3) = (Escape(10, Age, 3) - DropOff(10, Age, 52, 3) - DropOff(10, Age, 51, 3) - MSFDropOff(10, Age, 52, 3) - MSFDropOff(10, Age, 51, 3)) * FisheryScaler(51, 3)
+                TotalLandedCatch(52, 3) = TotalLandedCatch(52, 3) + LandedCatch(10, Age, 52, 3) + MSFLandedCatch(10, Age, 52, 3)
+                TotalLandedCatch(51, 3) = TotalLandedCatch(51, 3) + LandedCatch(10, Age, 51, 3) + MSFLandedCatch(10, Age, 51, 3)
+                Escape(10, Age, 3) = 0
+            Next Age
             TammEstimate(8, 3) = TotalLandedCatch(52, 3)
             TammEstimate(7, 3) = TotalLandedCatch(51, 3)
             TammCatch(7, 3) = TammEstimate(7, 3)
@@ -4076,14 +4080,14 @@ SkipNoSnt2:
 
         For Fish = 72 To 73
             For Area = 1 To 7
-            For Stk = StartStk(Area) To StopStk(Area)
-               For TStep = 1 To NumSteps
-                  For Age = 3 To MaxAge   '--- Only age 3-5 Fish in Freshwater
-                     TammTermRun(Area) = TammTermRun(Area) + LandedCatch(Stk * 2 - 1, Age, Fish, TStep) + MSFLandedCatch(Stk * 2 - 1, Age, Fish, TStep)
-                     TammTermRun(Area) = TammTermRun(Area) + LandedCatch(Stk * 2, Age, Fish, TStep) + MSFLandedCatch(Stk * 2, Age, Fish, TStep)
-                  Next Age
-               Next TStep
-            Next Stk
+                For Stk = StartStk(Area) To StopStk(Area)
+                    For TStep = 1 To NumSteps
+                        For Age = 3 To MaxAge   '--- Only age 3-5 Fish in Freshwater
+                            TammTermRun(Area) = TammTermRun(Area) + LandedCatch(Stk * 2 - 1, Age, Fish, TStep) + MSFLandedCatch(Stk * 2 - 1, Age, Fish, TStep)
+                            TammTermRun(Area) = TammTermRun(Area) + LandedCatch(Stk * 2, Age, Fish, TStep) + MSFLandedCatch(Stk * 2, Age, Fish, TStep)
+                        Next Age
+                    Next TStep
+                Next Stk
             Next Area
         Next Fish
 
@@ -5282,7 +5286,7 @@ NooksackSpringReEntry:
                     End If
                 End If
 
-               
+
 
                 For Age = MinAge To MaxAge
                     If Age = 2 Then
@@ -5813,7 +5817,7 @@ NotFish:
 
         '------- Print Version Number and Command File Number ---
 
-       
+
 
         xlWorkSheet = xlWorkBook.Sheets("TAMX")
         xlWorkSheet.Range("B1").Value = FramVersion
@@ -6213,7 +6217,7 @@ NooksackSpringReEntry2:
             End If
         Next
         xlWorkSheet.Range("N7").Value = NookSprETRS_NOR
-       
+
         '- Save WorkBook and Close Application if Necessary
         'xlApp.Application.DisplayAlerts = False
         'xlWorkBook.Save()
@@ -6248,11 +6252,11 @@ NooksackSpringReEntry2:
         '- Get TaaEtrs Instructions from Database Table
         Dim CmdStr As String
         CmdStr = "SELECT * FROM TaaETRSList ORDER BY TaaNum"
-        Dim TAAcm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        Dim TAADA As New System.Data.OleDb.OleDbDataAdapter
+        Dim TAAcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        Dim TAADA As New System.Data.SQLite.SQLiteDataAdapter
         TAADA.SelectCommand = TAAcm
-        Dim TAAcb As New OleDb.OleDbCommandBuilder
-        TAAcb = New OleDb.OleDbCommandBuilder(TAADA)
+        Dim TAAcb As New SQLite.SQLiteCommandBuilder
+        TAAcb = New SQLite.SQLiteCommandBuilder(TAADA)
         If FramDataSet.Tables.Contains("TaaETRSList") Then
             FramDataSet.Tables("TaaETRSList").Clear()
         End If
@@ -6332,7 +6336,7 @@ NextTaaETRS:
         Itercount = 1
         If CoastalIterations = True Then
             KeepIter = False
-            
+
             For K = 4 To 5
                 ' overwrite coastal fisheries with TAMM quota
 
@@ -6556,7 +6560,7 @@ NextTaaETRS:
                         FisheryQuota(Fish, TStep) = 0
                     End If
                 End If
-               
+
 
                 If FisheryFlag(Fish, TStep) = 7 Or FisheryFlag(Fish, TStep) = 17 Or FisheryFlag(Fish, TStep) = 27 Then
                     TotalSum = 0
@@ -6571,7 +6575,7 @@ NextTaaETRS:
                         MSFFisheryQuota(Fish, TStep) = 0
                     End If
                 End If
-                
+
             Next
         Next
 
@@ -6760,11 +6764,11 @@ NextTaaETRS:
         Dim ReportNumber, RecNum As Integer
         Dim RngVal1, RngVal2, RngVal3 As String
         CmdStr = "SELECT * FROM ReportDriver WHERE DriverName = " & Chr(34) & "PSCTable2.Drv" & Chr(34) & " ORDER BY ReportNumber,Option5"
-        Dim RDcm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        Dim ReportDA As New System.Data.OleDb.OleDbDataAdapter
+        Dim RDcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        Dim ReportDA As New System.Data.SQLite.SQLiteDataAdapter
         ReportDA.SelectCommand = RDcm
-        Dim RDcb As New OleDb.OleDbCommandBuilder
-        RDcb = New OleDb.OleDbCommandBuilder(ReportDA)
+        Dim RDcb As New SQLite.SQLiteCommandBuilder
+        RDcb = New SQLite.SQLiteCommandBuilder(ReportDA)
         If FramDataSet.Tables.Contains("ReportDriver") Then
             FramDataSet.Tables("ReportDriver").Rows.Clear()
         End If
@@ -6814,7 +6818,7 @@ NextTaaETRS:
                 Option5 = ""
             Else
                 Option5 = FramDataSet.Tables("ReportDriver").Rows(RecNum)(7)
-                
+
             End If
             If IsDBNull(FramDataSet.Tables("ReportDriver").Rows(RecNum)(8)) Then
                 Option6 = ""
@@ -6856,7 +6860,7 @@ NextTaaETRS:
             For RepStkNum = 1 To NumRepStks
                 Stk = RepStocks(RepStkNum)
                 If Stk > NumStk Then
-                    MsgBox("The PSCTable2.DRV in your database has a STOCK ERROR!" & vbCrLf & "The DRV is from an old Base Period that had more stocks" & vbCrLf & _
+                    MsgBox("The PSCTable2.DRV in your database has a STOCK ERROR!" & vbCrLf & "The DRV is from an old Base Period that had more stocks" & vbCrLf &
                            "You must DELETE your current DRV and read the most recent file" & vbCrLf & "TAMM Transfer Aborted !!!", MsgBoxStyle.OkOnly)
                     Exit Sub
                 End If
@@ -6965,7 +6969,7 @@ NextTaaETRS:
                 PageStk += 1
             Next
 
-            
+
             If LastPage = True Then
                 For Fish = 1 To NumFish
                     'If RunIDYearSelect < 2022 Then
@@ -6992,11 +6996,11 @@ NextTaaETRS:
         '- Get Instructions for Terminal Run Report WorkSheet from ReportDriver Table
         '- Read User Selected ReportDriver Data
         CmdStr = "SELECT * FROM ReportDriver WHERE DriverName = " & Chr(34) & "PSCTRuns.Drv" & Chr(34) & " ORDER BY ReportNumber,Option6"
-        Dim TRcm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        Dim ReportTR As New System.Data.OleDb.OleDbDataAdapter
+        Dim TRcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        Dim ReportTR As New System.Data.SQLite.SQLiteDataAdapter
         ReportTR.SelectCommand = TRcm
-        Dim TRcb As New OleDb.OleDbCommandBuilder
-        TRcb = New OleDb.OleDbCommandBuilder(ReportTR)
+        Dim TRcb As New SQLite.SQLiteCommandBuilder
+        TRcb = New SQLite.SQLiteCommandBuilder(ReportTR)
         If FramDataSet.Tables.Contains("ReportDriver") Then
             FramDataSet.Tables("ReportDriver").Rows.Clear()
         End If

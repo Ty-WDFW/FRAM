@@ -22,13 +22,13 @@ Public Module FramVar
    Public BACKFRAMSpreadSheetPath As String
    Public FramDataSet As New System.Data.DataSet()
    Public TransferDataSet As New System.Data.DataSet()
-   Public FramDB As New OleDb.OleDbConnection
-    Public TransDB As New OleDb.OleDbConnection
-    Public TransBP As New OleDb.OleDbConnection
-   Public StockRecruitDA As New System.Data.OleDb.OleDbDataAdapter
+    Public FramDB As New System.Data.SQLite.SQLiteConnection
+    Public TransDB As New System.Data.SQLite.SQLiteConnection
+    Public TransBP As New System.Data.SQLite.SQLiteConnection
+    Public StockRecruitDA As New System.Data.SQLite.SQLiteDataAdapter
 
-   '- Run Selection Variables
-   Public RunIDSelect As Integer
+    '- Run Selection Variables
+    Public RunIDSelect As Integer
    Public RunIDDelete As Integer
    Public RunIDTransfer() As Integer
    Public NumTransferID As Integer

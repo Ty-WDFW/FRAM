@@ -95,9 +95,9 @@ Public Class FVS_Welcome
     End Sub
 
    Private Sub FVS_Continue_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles FVS_Continue.Click
-      Me.Hide()
-      FVS_MainMenu.ShowDialog()
-   End Sub
+        Me.Hide()
+        FVS_MainMenu.Show()
+    End Sub
 
    Sub StopFormReSize()
       FVS_BackwardsFram_ReSize = True

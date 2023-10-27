@@ -18,10 +18,10 @@ Public Class FVS_ModelRunSelection
 
     Public Sub FillRunList()
 
-        Dim FramDB As New OleDb.OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & FVSdatabasename)
+        Dim FramDB As New SQLite.SQLiteConnection("Data Source=" & FVSdatabasename & ";Version=3;Compress=True;")
         FramDB.Open()
-        Dim drd1 As OleDb.OleDbDataReader
-        Dim cmd1 As New OleDb.OleDbCommand()
+        Dim drd1 As SQLite.SQLiteDataReader
+        Dim cmd1 As New SQLite.SQLiteCommand()
         cmd1.Connection = FramDB
         If RecordsetSelectionType = 11 Then
             cmd1.CommandText = "SELECT * FROM BaseID ORDER BY BasePeriodID"
@@ -92,13 +92,13 @@ Public Class FVS_ModelRunSelection
             Result = MsgBox("ERROR- Can't DELETE RecordSet when CURRENTLY in use!!" & vbCrLf & "SELECT another Recordset first before Delete", MsgBoxStyle.OkOnly)
             RecordsetSelectionType = 9
             Me.Close()
-            FVS_FramUtils.Visible = True
-            Exit Sub
+                'FVS_FramUtils.Visible = True
+                Exit Sub
          End If
          RunIDDelete = RunID(ListIndex)
          'RunIDNameSelect = RunIDName(ListIndex)
          Me.Close()
-         FVS_FramUtils.Visible = True
+            'FVS_FramUtils.Visible = True
 
         ElseIf RecordsetSelectionType = 3 Or RecordsetSelectionType = 11 Then
             Exit Sub
@@ -118,16 +118,16 @@ Public Class FVS_ModelRunSelection
       ElseIf RecordsetSelectionType = 2 Then
          RecordsetSelectionType = 9
          Me.Close()
-         FVS_FramUtils.Visible = True
-      ElseIf RecordsetSelectionType = 3 Then
+            'FVS_FramUtils.Visible = True
+        ElseIf RecordsetSelectionType = 3 Then
          RecordsetSelectionType = 9
          Me.Close()
-            FVS_FramUtils.Visible = True
+            'FVS_FramUtils.Visible = True
         ElseIf RecordsetSelectionType = 11 Then
             RecordsetSelectionType = 9
             Me.Close()
-            FVS_FramUtils.Visible = True
-      End If
+            'FVS_FramUtils.Visible = True
+        End If
    End Sub
 
    Private Sub FVS_ModelRunSelection_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
@@ -166,139 +166,139 @@ Public Class FVS_ModelRunSelection
       FillRunList()
    End Sub
 
-   Public Sub GetRunVariables(ByVal BaseNum As Integer, ByVal RunNum As Integer)
+    Public Sub GetRunVariables(ByVal BaseNum As Integer, ByVal RunNum As Integer)
 
-      Dim FramDA As New System.Data.OleDb.OleDbDataAdapter
-      Dim CmdStr As String
-      Dim RunIDNum, RecNum, FoundBaseID, Result As Integer
-        Dim drd1 As OleDb.OleDbDataReader
+        Dim FramDA As New System.Data.SQLite.SQLiteDataAdapter
+        Dim CmdStr As String
+        Dim RunIDNum, RecNum, FoundBaseID, Result As Integer
+        Dim drd1 As SQLite.SQLiteDataReader
         Dim RunYear As String
-        Dim cmd1 As New OleDb.OleDbCommand()
+        Dim cmd1 As New SQLite.SQLiteCommand()
 
 
         Me.Cursor = Cursors.WaitCursor
 
-      ModelRunBPSelect = False
+        ModelRunBPSelect = False
 
-      '- Set Common Variables for Pre-Terminal and Terminal States
-      PTerm = 0
-      Term = 1
+        '- Set Common Variables for Pre-Terminal and Terminal States
+        PTerm = 0
+        Term = 1
 
-      '- Open Text File for RunTime Messages
-      File_Name = FVSdatabasepath & "\FramBaseCheck.Txt"
+        '- Open Text File for RunTime Messages
+        File_Name = FVSdatabasepath & "\FramBaseCheck.Txt"
 
-      If Exists(File_Name) Then
-         'rssw.Close()
-         Delete(File_Name)
-      End If
-      rssw = CreateText(File_Name)
-      PrnLine = "Command File =" + FVSdatabasepath + "\" & RunIDNameSelect.ToString & "     " & Date.Now.ToString
-      rssw.WriteLine(PrnLine)
-      rssw.WriteLine(" ")
+        If Exists(File_Name) Then
+            'rssw.Close()
+            Delete(File_Name)
+        End If
+        rssw = CreateText(File_Name)
+        PrnLine = "Command File =" + FVSdatabasepath + "\" & RunIDNameSelect.ToString & "     " & Date.Now.ToString
+        rssw.WriteLine(PrnLine)
+        rssw.WriteLine(" ")
 
-      'Dim FramDB As New OleDb.OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" & FVSdatabasename)
-      FramDB.Open()
-      cmd1.Connection = FramDB
+        Dim FramDB As New SQLite.SQLiteConnection("Data Source=" & FVSdatabasename & ";Version=3;Compress=True;")
+        FramDB.Open()
+        cmd1.Connection = FramDB
 
-      '- Read BASE PERIOD Selection
-      cmd1.CommandText = "SELECT * FROM BaseID WHERE BasePeriodID = " & BaseNum.ToString
-      drd1 = cmd1.ExecuteReader
-      FoundBaseID = 0
-      Do While drd1.Read()
-         FoundBaseID = 1
-         Exit Do
-      Loop
-      If FoundBaseID = 0 Then
-         '- Can't Find Base Period ID Record for this RunID (Deleted??)
-         Result = MsgBox("Can't find the Base Period ID for this Model Run!" & vbCrLf & "Do you want to Choose another Base Period ???", MsgBoxStyle.YesNo)
-         If Result = vbNo Then
-            FramDB.Close()
-            rssw.Close()
-            Me.Cursor = Cursors.Default
-            Exit Sub
-         End If
-         '- Choose Base Period for this "Orphan" RunID
-         FramDB.Close()
-         ModelRunBPSelect = True
-         FVS_BasePeriodSelect.ShowDialog()
-         Me.BringToFront()
-         If BasePeriodIDSelect = 0 Then
-            FramDB.Close()
-            rssw.Close()
-            Exit Sub
-         Else
-            '- Change RunID Record to point at new Base Period Selection
-            FramDB.Open()
-            CmdStr = "SELECT * FROM RunID WHERE RunID = " & RunIDSelect.ToString & ";"
-            Dim RIDcm As New OleDb.OleDbCommand(CmdStr, FramDB)
-            Dim RunIDDA As New System.Data.OleDb.OleDbDataAdapter
-            RunIDDA.SelectCommand = RIDcm
-            Dim RIDcb As New OleDb.OleDbCommandBuilder
-            RIDcb = New OleDb.OleDbCommandBuilder(RunIDDA)
-            If FramDataSet.Tables.Contains("RunID") Then
-               FramDataSet.Tables("RunID").Clear()
+        '- Read BASE PERIOD Selection
+        cmd1.CommandText = "SELECT * FROM BaseID WHERE BasePeriodID = " & BaseNum.ToString
+        drd1 = cmd1.ExecuteReader
+        FoundBaseID = 0
+        Do While drd1.Read()
+            FoundBaseID = 1
+            Exit Do
+        Loop
+        If FoundBaseID = 0 Then
+            '- Can't Find Base Period ID Record for this RunID (Deleted??)
+            Result = MsgBox("Can't find the Base Period ID for this Model Run!" & vbCrLf & "Do you want to Choose another Base Period ???", MsgBoxStyle.YesNo)
+            If Result = vbNo Then
+                FramDB.Close()
+                rssw.Close()
+                Me.Cursor = Cursors.Default
+                Exit Sub
             End If
+            '- Choose Base Period for this "Orphan" RunID
+            FramDB.Close()
+            ModelRunBPSelect = True
+            'FVS_BasePeriodSelect.ShowDialog()
+            Me.BringToFront()
+            If BasePeriodIDSelect = 0 Then
+                FramDB.Close()
+                rssw.Close()
+                Exit Sub
+            Else
+                '- Change RunID Record to point at new Base Period Selection
+                FramDB.Open()
+                CmdStr = "SELECT * FROM RunID WHERE RunID = " & RunIDSelect.ToString & ";"
+                Dim RIDcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+                Dim RunIDDA As New System.Data.SQLite.SQLiteDataAdapter
+                RunIDDA.SelectCommand = RIDcm
+                Dim RIDcb As New SQLite.SQLiteCommandBuilder
+                RIDcb = New SQLite.SQLiteCommandBuilder(RunIDDA)
+                If FramDataSet.Tables.Contains("RunID") Then
+                    FramDataSet.Tables("RunID").Clear()
+                End If
                 RunIDDA.Fill(FramDataSet, "RunID") '**************************************
-   
-            Dim NumRID As Integer
-            NumRID = FramDataSet.Tables("RunID").Rows.Count
-            If NumRID <> 1 Then
-               MsgBox("ERROR in RunID Table of Database ... Duplicate Record", MsgBoxStyle.OkOnly)
+
+                Dim NumRID As Integer
+                NumRID = FramDataSet.Tables("RunID").Rows.Count
+                If NumRID <> 1 Then
+                    MsgBox("ERROR in RunID Table of Database ... Duplicate Record", MsgBoxStyle.OkOnly)
+                End If
+                FramDataSet.Tables("RunID").Rows(0)(5) = BasePeriodIDSelect
+                RunIDDA.Update(FramDataSet, "RunID")
+                RunIDDA = Nothing
+                ' ReRead New Base Period Record Selection
+                cmd1.CommandText = "SELECT * FROM BaseID WHERE BasePeriodID = " & BasePeriodIDSelect.ToString
+                drd1 = cmd1.ExecuteReader
+                drd1.Read()
             End If
-            FramDataSet.Tables("RunID").Rows(0)(5) = BasePeriodIDSelect
-            RunIDDA.Update(FramDataSet, "RunID")
-            RunIDDA = Nothing
-            ' ReRead New Base Period Record Selection
-            cmd1.CommandText = "SELECT * FROM BaseID WHERE BasePeriodID = " & BasePeriodIDSelect.ToString
-            drd1 = cmd1.ExecuteReader
-            drd1.Read()
-         End If
-      End If
+        End If
 
-      BasePeriodID = drd1.GetInt32(1)
-      BasePeriodIDSelect = BasePeriodID
-      BasePeriodName = drd1.GetString(2)
-      SpeciesName = drd1.GetString(3)
-      NumStk = drd1.GetInt32(4)
-      NumFish = drd1.GetInt32(5)
-      NumSteps = drd1.GetInt32(6)
-      NumAge = drd1.GetInt32(7)
-      MinAge = drd1.GetInt32(8)
-      MaxAge = drd1.GetInt32(9)
-      BasePeriodDate = drd1.GetDateTime(10)
-      BasePeriodComments = drd1.GetString(11)
-      StockVersion = drd1.GetInt32(12)
-      FisheryVersion = drd1.GetInt32(13)
-      TimeStepVersion = drd1.GetInt32(14)
-      cmd1.Dispose()
-      drd1.Dispose()
+        BasePeriodID = drd1.GetInt32(1)
+        BasePeriodIDSelect = BasePeriodID
+        BasePeriodName = drd1.GetString(2)
+        SpeciesName = drd1.GetString(3)
+        NumStk = drd1.GetInt32(4)
+        NumFish = drd1.GetInt32(5)
+        NumSteps = drd1.GetInt32(6)
+        NumAge = drd1.GetInt32(7)
+        MinAge = drd1.GetInt32(8)
+        MaxAge = drd1.GetInt32(9)
+        'BasePeriodDate = drd1.GetDateTime(10)
+        BasePeriodComments = drd1.GetString(11)
+        StockVersion = drd1.GetInt32(12)
+        FisheryVersion = drd1.GetInt32(13)
+        TimeStepVersion = drd1.GetInt32(14)
+        'cmd1.Dispose()
+        drd1.Dispose()
 
-      '- Text File Printing
-      Dim sb As New StringBuilder
+        '- Text File Printing
+        Dim sb As New StringBuilder
 
-      '- ReDim Base Arrays
-      Call ReDimBaseArrays()
+        '- ReDim Base Arrays
+        Call ReDimBaseArrays()
 
-      '- ReDim Calculation and Input Arrays
-      Call ReDimCalcArrays()
+        '- ReDim Calculation and Input Arrays
+        Call ReDimCalcArrays()
 
-      '- Read RUN Selection Variables
-      
+        '- Read RUN Selection Variables
+
         '*****************************************************************************************************
         Dim RunIDTable As String = "RunID"
         CmdStr = "SELECT * FROM [" & RunIDTable & "];"
-        Dim RunID1cm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        Dim RunID1DA As New System.Data.OleDb.OleDbDataAdapter
+        Dim RunID1cm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        Dim RunID1DA As New System.Data.SQLite.SQLiteDataAdapter
         RunID1DA.SelectCommand = RunID1cm
-        Dim RunID1cb As New OleDb.OleDbCommandBuilder
-        RunID1cb = New OleDb.OleDbCommandBuilder(RunID1DA)
+        Dim RunID1cb As New SQLite.SQLiteCommandBuilder
+        RunID1cb = New SQLite.SQLiteCommandBuilder(RunID1DA)
         RunID1DA.Fill(FramDataSet, "RunID")
 
-       
+
         'Dim col As DataColumn
 
         Dim i As Integer = 1
-       
+
         i = FramDataSet.Tables(RunIDTable).Columns.IndexOf("RunYear")
         If i = -1 Then 'This Column is missing so add it
             RunID1cm.CommandText = "ALTER TABLE " & RunIDTable & " ADD " & "RunYear" & " " & "String"
@@ -330,7 +330,7 @@ Public Class FVS_ModelRunSelection
             RunID1cm.ExecuteNonQuery()   'executes the SQL code in cmd without querry
         End If
 
-        
+
 
         '*****************************************************************
 
@@ -343,9 +343,9 @@ Public Class FVS_ModelRunSelection
         RunIDNameSelect = drd1.GetString(3)     '- Current Run Name
         RunIDTitleSelect = drd1.GetString(4)    '- Current Run Title
         RunIDCommentsSelect = drd1.GetString(6)   '- Current Run Comments
-        RunIDCreationDateSelect = drd1.GetDateTime(7)
-        RunIDModifyInputDateSelect = drd1.GetDateTime(8)
-        RunIDRunTimeDateSelect = drd1.GetDateTime(9)
+        'RunIDCreationDateSelect = drd1.GetDateTime(7)
+        'RunIDModifyInputDateSelect = drd1.GetDateTime(8)
+        'RunIDRunTimeDateSelect = drd1.GetDateTime(9)
 
 
         Try
@@ -383,7 +383,7 @@ Public Class FVS_ModelRunSelection
             FRAMVers = "unknown"
         End Try
 
-        cmd1.Dispose()
+        'cmd1.Dispose()
         drd1.Dispose()
 
 
@@ -401,7 +401,7 @@ Public Class FVS_ModelRunSelection
             End If
             BaseCohortSize(Stk, Age) = drd1.GetDouble(3)   '- Base Period Cohort Size
         Loop
-        cmd1.Dispose()
+        'cmd1.Dispose()
         drd1.Dispose()
 
         '- Read Base Period Exploitation Rate Data
@@ -423,7 +423,7 @@ Public Class FVS_ModelRunSelection
                 AnyBaseRate(Fish, TStep) = 1
             End If
         Loop
-        cmd1.Dispose()
+        'cmd1.Dispose()
         drd1.Dispose()
 
         '- Read Base Maturation Rate Data
@@ -441,7 +441,7 @@ Public Class FVS_ModelRunSelection
             End If
             MaturationRate(Stk, Age, TStep) = drd1.GetDouble(4) '- Maturation Rate
         Loop
-        cmd1.Dispose()
+        'cmd1.Dispose()
         drd1.Dispose()
 
         '- Read Base Stock Data
@@ -469,7 +469,7 @@ Public Class FVS_ModelRunSelection
                 MsgBox("Error in Stock Table Read - Bad Record count", MsgBoxStyle.OkOnly)
             End If
         End If
-        cmd1.Dispose()
+        'cmd1.Dispose()
         drd1.Dispose()
 
         '- Read Natural Mortality Rates (Base Data)
@@ -485,7 +485,7 @@ Public Class FVS_ModelRunSelection
             End If
             NaturalMortality(Age, TStep) = drd1.GetDouble(3) '- Natural Mortality Rate
         Loop
-        cmd1.Dispose()
+        'cmd1.Dispose()
         drd1.Dispose()
 
         '- Temp Fix for BaseERate, Nat Mort Rate, and Maturity Rate Time 4
@@ -527,7 +527,7 @@ Public Class FVS_ModelRunSelection
         If FishNum <> NumFish Then
             MsgBox("Error in Fishery Table Read - Bad Record count", MsgBoxStyle.OkOnly)
         End If
-        cmd1.Dispose()
+        'cmd1.Dispose()
         drd1.Dispose()
 
         '- Read Base Time Step Data
@@ -551,7 +551,7 @@ Public Class FVS_ModelRunSelection
         If TimeNum <> NumSteps Then
             MsgBox("Error in Time Step Table Read - Bad Record count", MsgBoxStyle.OkOnly)
         End If
-        cmd1.Dispose()
+        'cmd1.Dispose()
         drd1.Dispose()
 
         '- Read Fishery Incidental Mortality Rates (Base Data)
@@ -567,7 +567,7 @@ Public Class FVS_ModelRunSelection
             End If
             IncidentalRate(Fish, TStep) = drd1.GetDouble(3) '- Incidental Mortality Rate
         Loop
-        cmd1.Dispose()
+        'cmd1.Dispose()
         drd1.Dispose()
 
         '- Read Fishery Shaker Release Mortality Rates (Base Data)
@@ -583,7 +583,7 @@ Public Class FVS_ModelRunSelection
             End If
             ShakerMortRate(Fish, TStep) = drd1.GetDouble(3) '- Incidental Mortality Rate
         Loop
-        cmd1.Dispose()
+        'cmd1.Dispose()
         drd1.Dispose()
 
         '- Read Terminal Fishery Flags (Base Data by Time Step)
@@ -599,7 +599,7 @@ Public Class FVS_ModelRunSelection
             End If
             TerminalFisheryFlag(Fish, TStep) = drd1.GetInt32(3) '- Terminal Fishery Flag
         Loop
-        cmd1.Dispose()
+        'cmd1.Dispose()
         drd1.Dispose()
 
         '- Read Base Fishery Model Stock Proportion (Proportion Model Stocks of Entire Fishery Catch)
@@ -614,7 +614,7 @@ Public Class FVS_ModelRunSelection
             End If
             ModelStockProportion(Fish) = drd1.GetDouble(2) '- Model Stock Proportion of Fishery/Time-Step
         Loop
-        cmd1.Dispose()
+        'cmd1.Dispose()
         drd1.Dispose()
 
         '- Read Base Von Bertlanffy Growth Parameters for CHINOOK
@@ -660,7 +660,7 @@ Public Class FVS_ModelRunSelection
                     MsgBox("Error in Model Stock Proportion Table Read", MsgBoxStyle.OkOnly)
                 End If
             Loop
-            cmd1.Dispose()
+            'cmd1.Dispose()
             drd1.Dispose()
         ElseIf SpeciesName = "COHO" Then
             '- Place Holder Values for COHO
@@ -691,7 +691,7 @@ Public Class FVS_ModelRunSelection
 
 
         End If
-        cmd1.Dispose()
+        'cmd1.Dispose()
         drd1.Dispose()
 
         If SpeciesName = "CHINOOK" Then
@@ -709,7 +709,7 @@ Public Class FVS_ModelRunSelection
                 End If
                 AEQ(Stk, Age, TStep) = drd1.GetDouble(4) '- AEQ Value
             Loop
-            cmd1.Dispose()
+            'cmd1.Dispose()
             drd1.Dispose()
 
             '- Read Base EncounterRateAdjustment Data (Shaker Encounter Adjustment)
@@ -726,7 +726,7 @@ Public Class FVS_ModelRunSelection
                 End If
                 EncounterRateAdjustment(Age, Fish, TStep) = drd1.GetDouble(4) '- AEQ Value
             Loop
-            cmd1.Dispose()
+            'cmd1.Dispose()
             drd1.Dispose()
 
             '- Read Chinook Base Calibration EncounterRateAdjustment Data by Fishery, TimeStep
@@ -743,7 +743,7 @@ Public Class FVS_ModelRunSelection
                 ChinookBaseEncounterAdjustment(Fish, 3) = drd1.GetDouble(3)
                 ChinookBaseEncounterAdjustment(Fish, 4) = drd1.GetDouble(4)
             Loop
-            cmd1.Dispose()
+            'cmd1.Dispose()
             drd1.Dispose()
 
             '- Read Chinook Base Calibration Size Limit Data by Fishery, TimeStep
@@ -751,11 +751,11 @@ Public Class FVS_ModelRunSelection
 
 
             CmdStr = "SELECT * FROM ChinookBaseSizeLimit"
-            Dim BSLcm As New OleDb.OleDbCommand(CmdStr, FramDB)
-            Dim BSLDA As New System.Data.OleDb.OleDbDataAdapter
+            Dim BSLcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+            Dim BSLDA As New System.Data.SQLite.SQLiteDataAdapter
             BSLDA.SelectCommand = BSLcm
-            Dim BSLcb As New OleDb.OleDbCommandBuilder
-            BSLcb = New OleDb.OleDbCommandBuilder(BSLDA)
+            Dim BSLcb As New SQLite.SQLiteCommandBuilder
+            BSLcb = New SQLite.SQLiteCommandBuilder(BSLDA)
 
             'FramDataSet.Clear()
             BSLDA.Fill(FramDataSet, "ChinookBaseSizeLimit")
@@ -810,11 +810,11 @@ Public Class FVS_ModelRunSelection
         '- Use OleDbDataAdapter Method instead of OleDb Command
 
         CmdStr = "SELECT * FROM FisheryScalers WHERE RunID = " & RunIDSelect.ToString & " ORDER BY FisheryID, TimeStep"
-        Dim FScm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        Dim FishScalerDA As New System.Data.OleDb.OleDbDataAdapter
+        Dim FScm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        Dim FishScalerDA As New System.Data.SQLite.SQLiteDataAdapter
         FishScalerDA.SelectCommand = FScm
-        Dim FScb As New OleDb.OleDbCommandBuilder
-        FScb = New OleDb.OleDbCommandBuilder(FishScalerDA)
+        Dim FScb As New SQLite.SQLiteCommandBuilder
+        FScb = New SQLite.SQLiteCommandBuilder(FishScalerDA)
         FishScalerDA.Fill(FramDataSet, "FisheryScalers")
         Dim NumFS As Integer
         NumFS = FramDataSet.Tables("FisheryScalers").Rows.Count
@@ -831,7 +831,7 @@ Public Class FVS_ModelRunSelection
             If (column.ColumnName) = "MSFFisheryScaleFactor" Then GoTo FoundNewColumn
         Next
         'Next
-        MsgBox("Wrong Format for Database Table 'FisheryScalers' !!!!" & vbCrLf & "You have the WRONG Type database (ie Old Version VS)" & vbCrLf & _
+        MsgBox("Wrong Format for Database Table 'FisheryScalers' !!!!" & vbCrLf & "You have the WRONG Type database (ie Old Version VS)" & vbCrLf &
                "Please Choose Another Database to use" & vbCrLf & "with this Version of FramVS (Multiple MSF)", MsgBoxStyle.OkOnly)
         End
 FoundNewColumn:
@@ -879,11 +879,11 @@ FoundNewColumn:
 
         '- Read Stock Recruit Input Scalers Data
         CmdStr = "SELECT * FROM StockRecruit WHERE RunID = " & RunIDSelect.ToString & " ORDER BY StockID, Age"
-        Dim SRcm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        'Dim StockRecruitDA As New System.Data.OleDb.OleDbDataAdapter
+        Dim SRcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        'Dim StockRecruitDA As New System.Data.SQLite.SQLiteDataAdapter
         StockRecruitDA.SelectCommand = SRcm
-        Dim SRcb As New OleDb.OleDbCommandBuilder
-        SRcb = New OleDb.OleDbCommandBuilder(StockRecruitDA)
+        Dim SRcb As New SQLite.SQLiteCommandBuilder
+        SRcb = New SQLite.SQLiteCommandBuilder(StockRecruitDA)
         If FramDataSet.Tables.Contains("StockRecruit") Then
             FramDataSet.Tables("StockRecruit").Clear()
         End If
@@ -910,8 +910,8 @@ FoundNewColumn:
 
         '- Read NonRetention Flag and Input Data
         CmdStr = "SELECT * FROM NonRetention WHERE RunID = " & RunIDSelect.ToString & " ORDER BY FisheryID, TimeStep"
-        Dim NRcm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        Dim NonRetentionDA As New System.Data.OleDb.OleDbDataAdapter
+        Dim NRcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        Dim NonRetentionDA As New System.Data.SQLite.SQLiteDataAdapter
         '- Explicitly Zero Arrays
         For Fish As Integer = 0 To NumFish
             For TStep As Integer = 0 To NumSteps
@@ -922,8 +922,8 @@ FoundNewColumn:
             Next
         Next
         NonRetentionDA.SelectCommand = NRcm
-        Dim NRcb As New OleDb.OleDbCommandBuilder
-        NRcb = New OleDb.OleDbCommandBuilder(NonRetentionDA)
+        Dim NRcb As New SQLite.SQLiteCommandBuilder
+        NRcb = New SQLite.SQLiteCommandBuilder(NonRetentionDA)
         If FramDataSet.Tables.Contains("NonRetention") Then
             FramDataSet.Tables("NonRetention").Clear()
         End If
@@ -952,10 +952,10 @@ FoundNewColumn:
 
         '- Read Size Limit Input Data
         CmdStr = "SELECT * FROM SizeLimits WHERE RunID = " & RunIDSelect.ToString & " ORDER BY FisheryID, TimeStep"
-        Dim SLcm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        Dim SizeLimitsDA As New System.Data.OleDb.OleDbDataAdapter
+        Dim SLcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        Dim SizeLimitsDA As New System.Data.SQLite.SQLiteDataAdapter
         SizeLimitsDA.SelectCommand = SLcm
-        Dim SLcb As New OleDb.OleDbCommandBuilder
+        Dim SLcb As New SQLite.SQLiteCommandBuilder
         '- Explicitly Zero Arrays
         For Fish As Integer = 0 To NumFish
             For TStep As Integer = 0 To NumSteps
@@ -963,7 +963,7 @@ FoundNewColumn:
                 MaxSizeLimit(Fish, TStep) = 0
             Next
         Next
-        SLcb = New OleDb.OleDbCommandBuilder(SizeLimitsDA)
+        SLcb = New SQLite.SQLiteCommandBuilder(SizeLimitsDA)
         If FramDataSet.Tables.Contains("SizeLimits") Then
             FramDataSet.Tables("SizeLimits").Clear()
         End If
@@ -1000,11 +1000,11 @@ FoundNewColumn:
 
             CmdStr = "SELECT * FROM SLRatio WHERE RunID = " & RunIDSelect.ToString & " ORDER BY FisheryID, Age, TimeStep"
 
-            Dim SLRatcm As New OleDb.OleDbCommand(CmdStr, FramDB)
-            Dim SLRatDA As New System.Data.OleDb.OleDbDataAdapter
+            Dim SLRatcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+            Dim SLRatDA As New System.Data.SQLite.SQLiteDataAdapter
             SLRatDA.SelectCommand = SLRatcm
-            Dim SLRatcb As New OleDb.OleDbCommandBuilder
-            SLRatcb = New OleDb.OleDbCommandBuilder(SLRatDA)
+            Dim SLRatcb As New SQLite.SQLiteCommandBuilder
+            SLRatcb = New SQLite.SQLiteCommandBuilder(SLRatDA)
             If FramDataSet.Tables.Contains("SLRatio") Then
                 FramDataSet.Tables("SLRatio").Clear()
             End If
@@ -1058,8 +1058,8 @@ FoundNewColumn:
 
         '- Read StockFisheryRateScaler Data
         CmdStr = "SELECT * FROM StockFisheryRateScaler WHERE RunID = " & RunIDSelect.ToString & " ORDER BY StockID, FisheryID, TimeStep"
-        Dim SFRcm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        Dim StockFisheryDA As New System.Data.OleDb.OleDbDataAdapter
+        Dim SFRcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        Dim StockFisheryDA As New System.Data.SQLite.SQLiteDataAdapter
         '- Set All StockFishRateScalers to ONE (Default Value)
         For Stk As Integer = 1 To NumStk
             For Fish As Integer = 1 To NumFish
@@ -1069,8 +1069,8 @@ FoundNewColumn:
             Next
         Next
         StockFisheryDA.SelectCommand = SFRcm
-        Dim SFRcb As New OleDb.OleDbCommandBuilder
-        SFRcb = New OleDb.OleDbCommandBuilder(StockFisheryDA)
+        Dim SFRcb As New SQLite.SQLiteCommandBuilder
+        SFRcb = New SQLite.SQLiteCommandBuilder(StockFisheryDA)
         If FramDataSet.Tables.Contains("StockFisheryScaler") Then
             FramDataSet.Tables("StockFisheryScaler").Clear()
         End If
@@ -1092,11 +1092,11 @@ FoundNewColumn:
 
         '- Read Backwards FRAM Target Escapement Data
         CmdStr = "SELECT * FROM BackwardsFRAM WHERE RunID = " & RunIDSelect.ToString
-        Dim BFcm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        Dim BFDA As New System.Data.OleDb.OleDbDataAdapter
+        Dim BFcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        Dim BFDA As New System.Data.SQLite.SQLiteDataAdapter
         BFDA.SelectCommand = BFcm
-        Dim BFcb As New OleDb.OleDbCommandBuilder
-        BFcb = New OleDb.OleDbCommandBuilder(BFDA)
+        Dim BFcb As New SQLite.SQLiteCommandBuilder
+        BFcb = New SQLite.SQLiteCommandBuilder(BFDA)
         If FramDataSet.Tables.Contains("BackwardsFRAM") Then
             FramDataSet.Tables("BackwardsFRAM").Clear()
         End If
@@ -1127,11 +1127,11 @@ FoundNewColumn:
 
         '- Read Mortality Data
         CmdStr = "SELECT * FROM Mortality WHERE RunID = " & RunIDSelect.ToString
-        Dim Mcm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        Dim MortalityDA As New System.Data.OleDb.OleDbDataAdapter
+        Dim Mcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        Dim MortalityDA As New System.Data.SQLite.SQLiteDataAdapter
         MortalityDA.SelectCommand = Mcm
-        Dim Mcb As New OleDb.OleDbCommandBuilder
-        Mcb = New OleDb.OleDbCommandBuilder(MortalityDA)
+        Dim Mcb As New SQLite.SQLiteCommandBuilder
+        Mcb = New SQLite.SQLiteCommandBuilder(MortalityDA)
         If FramDataSet.Tables.Contains("Mortality") Then
             FramDataSet.Tables("Mortality").Clear()
         End If
@@ -1189,11 +1189,11 @@ FoundNewColumn:
 
         '- Read Cohort Data
         CmdStr = "SELECT * FROM Cohort WHERE RunID = " & RunIDSelect.ToString
-        Dim CScm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        Dim CohortDA As New System.Data.OleDb.OleDbDataAdapter
+        Dim CScm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        Dim CohortDA As New System.Data.SQLite.SQLiteDataAdapter
         CohortDA.SelectCommand = CScm
-        Dim CScb As New OleDb.OleDbCommandBuilder
-        CScb = New OleDb.OleDbCommandBuilder(CohortDA)
+        Dim CScb As New SQLite.SQLiteCommandBuilder
+        CScb = New SQLite.SQLiteCommandBuilder(CohortDA)
         If FramDataSet.Tables.Contains("Cohort") Then
             FramDataSet.Tables("Cohort").Clear()
         End If
@@ -1219,11 +1219,11 @@ FoundNewColumn:
 
         '- Read Escapement Data
         CmdStr = "SELECT * FROM Escapement WHERE RunID = " & RunIDSelect.ToString
-        Dim EScm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        Dim EscapementDA As New System.Data.OleDb.OleDbDataAdapter
+        Dim EScm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        Dim EscapementDA As New System.Data.SQLite.SQLiteDataAdapter
         EscapementDA.SelectCommand = EScm
-        Dim EScb As New OleDb.OleDbCommandBuilder
-        EScb = New OleDb.OleDbCommandBuilder(EscapementDA)
+        Dim EScb As New SQLite.SQLiteCommandBuilder
+        EScb = New SQLite.SQLiteCommandBuilder(EscapementDA)
         If FramDataSet.Tables.Contains("Escapement") Then
             FramDataSet.Tables("Escapement").Clear()
         End If
@@ -1245,11 +1245,11 @@ FoundNewColumn:
 
         '- Read Total Fishery Mortality Data
         CmdStr = "SELECT * FROM FisheryMortality WHERE RunID = " & RunIDSelect.ToString
-        Dim TFMcm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        Dim TFMDA As New System.Data.OleDb.OleDbDataAdapter
+        Dim TFMcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        Dim TFMDA As New System.Data.SQLite.SQLiteDataAdapter
         TFMDA.SelectCommand = TFMcm
-        Dim TFMcb As New OleDb.OleDbCommandBuilder
-        TFMcb = New OleDb.OleDbCommandBuilder(EscapementDA)
+        Dim TFMcb As New SQLite.SQLiteCommandBuilder
+        TFMcb = New SQLite.SQLiteCommandBuilder(EscapementDA)
         If FramDataSet.Tables.Contains("FisheryMortality") Then
             FramDataSet.Tables("FisheryMortality").Clear()
         End If
@@ -1279,11 +1279,11 @@ FoundNewColumn:
 
         CmdStr = "SELECT * FROM PSCMaxER WHERE RunID = " & RunIDSelect.ToString
 
-        Dim MEcm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        Dim MEDA As New System.Data.OleDb.OleDbDataAdapter
+        Dim MEcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        Dim MEDA As New System.Data.SQLite.SQLiteDataAdapter
         MEDA.SelectCommand = MEcm
-        Dim MEcb As New OleDb.OleDbCommandBuilder
-        MEcb = New OleDb.OleDbCommandBuilder(MEDA)
+        Dim MEcb As New SQLite.SQLiteCommandBuilder
+        MEcb = New SQLite.SQLiteCommandBuilder(MEDA)
         If FramDataSet.Tables.Contains("PSCMaxER") Then
             FramDataSet.Tables("PSCMaxER").Clear()
         End If
@@ -1324,7 +1324,7 @@ SkipCalcArrays:
 
     End Sub
 
-   Private Sub TransferButton_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles TransferButton.Click
+    Private Sub TransferButton_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles TransferButton.Click
 
       Dim Num As Integer
       NumTransferID = ListBox1.SelectedItems.Count
@@ -1333,14 +1333,14 @@ SkipCalcArrays:
          RunIDTransfer(Num) = CInt(ListBox1.SelectedItems(Num).ToString.Substring(0, 5))
       Next
       Me.Close()
-      FVS_FramUtils.Visible = True
+        'FVS_FramUtils.Visible = True
 
-   End Sub
+    End Sub
 
    Private Sub btn_DeleteMulti_Click(sender As System.Object, e As System.EventArgs) Handles btn_DeleteMulti.Click
       Me.Close()
-      FVS_MultipleRunDeletion.ShowDialog()
-      RecordsetSelectionType = 9
+        'FVS_MultipleRunDeletion.ShowDialog()
+        RecordsetSelectionType = 9
     End Sub
 
     Private Sub ListBox1_ControlRemoved(ByVal sender As Object, ByVal e As System.Windows.Forms.ControlEventArgs) Handles ListBox1.ControlRemoved

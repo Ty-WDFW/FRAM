@@ -33,11 +33,11 @@ Module FramOutput
         TerminalRunReportSorted = False
         CmdStr = "SELECT * FROM ReportDriver WHERE DriverName = " & Chr(34) & ReportDriverName.ToString & Chr(34) & " ORDER BY DriverName,ReportNumber,Option1,Option2,Option3,Option4,Option5,Option6"
 SortTermRun:
-        Dim RDcm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        Dim ReportDA As New System.Data.OleDb.OleDbDataAdapter
+        Dim RDcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        Dim ReportDA As New System.Data.SQLite.SQLiteDataAdapter
         ReportDA.SelectCommand = RDcm
-        Dim RDcb As New OleDb.OleDbCommandBuilder
-        RDcb = New OleDb.OleDbCommandBuilder(ReportDA)
+        Dim RDcb As New SQLite.SQLiteCommandBuilder
+        RDcb = New SQLite.SQLiteCommandBuilder(ReportDA)
         If FramDataSet.Tables.Contains("ReportDriver") Then
             FramDataSet.Tables("ReportDriver").Rows.Clear()
         End If
@@ -224,16 +224,16 @@ ReportDone:
         '- Check if Driver Name already in use & Setup Data Adapter Commands
         Dim CmdStr As String
         CmdStr = "SELECT * FROM ReportDriver WHERE DriverName = " & Chr(34) & ReportDriverName & Chr(34)
-        Dim DrvDA As New OleDb.OleDbCommand(CmdStr, FramDB)
-        Dim DriverDA As New System.Data.OleDb.OleDbDataAdapter
+        Dim DrvDA As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        Dim DriverDA As New System.Data.SQLite.SQLiteDataAdapter
         DriverDA.SelectCommand = DrvDA
 
         CmdStr = "DELETE * FROM ReportDriver WHERE DriverName = " & Chr(34) & ReportDriverName & Chr(34)
-        Dim DrvDcm As New OleDb.OleDbCommand(CmdStr, FramDB)
+        Dim DrvDcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
         DriverDA.DeleteCommand = DrvDcm
 
-        Dim DRVcb As New OleDb.OleDbCommandBuilder
-        DRVcb = New OleDb.OleDbCommandBuilder(DriverDA)
+        Dim DRVcb As New SQLite.SQLiteCommandBuilder
+        DRVcb = New SQLite.SQLiteCommandBuilder(DriverDA)
 
         '- Check if Report Driver Name is already in use
         If FramDataSet.Tables.Contains("ReportDriver") Then
@@ -257,8 +257,8 @@ ReportDone:
 
         '========================================
         '- Open ReportDriver Table in DataBase to Store Parameters
-        Dim DrvTrans As OleDb.OleDbTransaction
-        Dim DFC As New OleDbCommand
+        Dim DrvTrans As SQLite.SQLiteTransaction
+        Dim DFC As New SQLite.SQLiteCommand
         If FramDB.State <> ConnectionState.Open Then
             FramDB.Open()
         End If
@@ -3901,11 +3901,11 @@ NextRepFishery:
         '            End If
         '         Next
 
-        '         Dim Mcm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        '         Dim MortalityDA As New System.Data.OleDb.OleDbDataAdapter
+        '         Dim Mcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        '         Dim MortalityDA As New System.Data.SQLite.SQLiteDataAdapter
         '         MortalityDA.SelectCommand = Mcm
-        '         Dim Mcb As New OleDb.OleDbCommandBuilder
-        '         Mcb = New OleDb.OleDbCommandBuilder(MortalityDA)
+        '         Dim Mcb As New SQLite.SQLiteCommandBuilder
+        '         Mcb = New SQLite.SQLiteCommandBuilder(MortalityDA)
         '         If FramDataSet.Tables.Contains("PSCMort") Then
         '            FramDataSet.Tables("PSCMort").Clear()
         '         End If
@@ -3960,11 +3960,11 @@ NextRepFishery:
         '            End If
         '         Next
 
-        '         Dim CScm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        '         Dim CohortDA As New System.Data.OleDb.OleDbDataAdapter
+        '         Dim CScm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        '         Dim CohortDA As New System.Data.SQLite.SQLiteDataAdapter
         '         CohortDA.SelectCommand = CScm
-        '         Dim CScb As New OleDb.OleDbCommandBuilder
-        '         CScb = New OleDb.OleDbCommandBuilder(CohortDA)
+        '         Dim CScb As New SQLite.SQLiteCommandBuilder
+        '         CScb = New SQLite.SQLiteCommandBuilder(CohortDA)
         '         If FramDataSet.Tables.Contains("PSCCohort") Then
         '            FramDataSet.Tables("PSCCohort").Clear()
         '         End If
@@ -3994,11 +3994,11 @@ NextRepFishery:
         '               CmdStr &= " OR "
         '            End If
         '         Next
-        '         Dim EScm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        '         Dim EscapementDA As New System.Data.OleDb.OleDbDataAdapter
+        '         Dim EScm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        '         Dim EscapementDA As New System.Data.SQLite.SQLiteDataAdapter
         '         EscapementDA.SelectCommand = EScm
-        '         Dim EScb As New OleDb.OleDbCommandBuilder
-        '         EScb = New OleDb.OleDbCommandBuilder(EscapementDA)
+        '         Dim EScb As New SQLite.SQLiteCommandBuilder
+        '         EScb = New SQLite.SQLiteCommandBuilder(EscapementDA)
         '         If FramDataSet.Tables.Contains("PSCEsc") Then
         '            FramDataSet.Tables("PSCEsc").Clear()
         '         End If
@@ -4395,11 +4395,11 @@ NextRepFishery:
         '         " Mortality.MSFLandedCatch,Mortality.MSFNonRetention, Mortality.MSFShaker, Mortality.MSFDropOff" & _
         '         " FROM Mortality INNER JOIN RunID ON Mortality.RunID = RunID.RunID ORDER BY RunID.RunYear;"
 
-        '      Dim Mcm As New OleDb.OleDbCommand(CmdStr, FramDB)
-        '      Dim MortalityDA As New System.Data.OleDb.OleDbDataAdapter
+        '      Dim Mcm As New SQLite.SQLiteCommand(CmdStr, FramDB)
+        '      Dim MortalityDA As New System.Data.SQLite.SQLiteDataAdapter
         '      MortalityDA.SelectCommand = Mcm
-        '      Dim Mcb As New OleDb.OleDbCommandBuilder
-        '      Mcb = New OleDb.OleDbCommandBuilder(MortalityDA)
+        '      Dim Mcb As New SQLite.SQLiteCommandBuilder
+        '      Mcb = New SQLite.SQLiteCommandBuilder(MortalityDA)
         '      If FramDataSet.Tables.Contains("PSCIntercept") Then
         '         FramDataSet.Tables("PSCIntercept").Clear()
         '      End If
