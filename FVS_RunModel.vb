@@ -685,4 +685,8 @@ Public Class FVS_RunModel
             T4CohortFlag2 = False
         End If
     End Sub
+
+    Private Sub MSFBiasCorrectionCheckBox_Click(sender As Object, e As EventArgs) Handles MSFBiasCorrectionCheckBox.Click
+
+    End Sub
 End Class

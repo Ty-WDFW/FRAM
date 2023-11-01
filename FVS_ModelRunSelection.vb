@@ -8,12 +8,12 @@ Imports System.Data
 
 Public Class FVS_ModelRunSelection
 
-   '- Run List Selection Variables
-    Public Shared RunID(150) As Integer
-    Public Shared BaseID(50) As Integer
-   Public Shared RunIDName(150) As String
-   Public Shared RunBasePeriodID(150) As Integer
-   Public PrnLine, PrnPart As String
+    '- Run List Selection Variables
+    Public Shared RunID(10000) As Integer
+    Public Shared BaseID(10000) As Integer
+    Public Shared RunIDName(10000) As String
+    Public Shared RunBasePeriodID(10000) As Integer
+    Public PrnLine, PrnPart As String
    Public rssw As StreamWriter
 
     Public Sub FillRunList()
