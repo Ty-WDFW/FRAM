@@ -1,0 +1,52 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\FRAM\\FRAM SQLite\\FRAM\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B19D91E4-7B4B-453E-9859-A5666F9038A3}|FramVS.vbproj|c:\\fram\\fram sqlite\\fram\\fvs_mainmenu.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form",
+      "RelativeMoniker": "D:0:0:{B19D91E4-7B4B-453E-9859-A5666F9038A3}|FramVS.vbproj|solutionrelative:fvs_mainmenu.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B19D91E4-7B4B-453E-9859-A5666F9038A3}|FramVS.vbproj|c:\\fram\\fram sqlite\\fram\\fvs_runmodel.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form",
+      "RelativeMoniker": "D:0:0:{B19D91E4-7B4B-453E-9859-A5666F9038A3}|FramVS.vbproj|solutionrelative:fvs_runmodel.vb||{2C015C70-C72C-11D0-88C3-00A0C9110049}|Form"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "FVS_MainMenu.vb [Design]",
+              "DocumentMoniker": "C:\\FRAM\\FRAM SQLite\\FRAM\\FVS_MainMenu.vb",
+              "RelativeDocumentMoniker": "FVS_MainMenu.vb",
+              "ToolTip": "C:\\FRAM\\FRAM SQLite\\FRAM\\FVS_MainMenu.vb [Design]*",
+              "RelativeToolTip": "FVS_MainMenu.vb [Design]*",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2025-05-27T22:34:26.68Z",
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "FVS_RunModel.vb [Design]",
+              "DocumentMoniker": "C:\\FRAM\\FRAM SQLite\\FRAM\\FVS_RunModel.vb",
+              "RelativeDocumentMoniker": "FVS_RunModel.vb",
+              "ToolTip": "C:\\FRAM\\FRAM SQLite\\FRAM\\FVS_RunModel.vb [Design]",
+              "RelativeToolTip": "FVS_RunModel.vb [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003361|",
+              "WhenOpened": "2025-05-27T22:34:18.16Z",
+              "EditorCaption": " [Design]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
